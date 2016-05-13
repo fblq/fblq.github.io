@@ -4,13 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>SpringMVC学习篇（一） | 木心少年</title>
+    <title>2016-05-12 | 木心少年</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhong.zhou">
     
-    <meta name="description" content="SpringMVC简介
-  SpringMVC是一个基于请求-响应模型的开发框架，作为表现层框架，它遵循开闭原则，以原生的servlet框架对象为依托，通过合理的抽象，制订了严谨的请求处理流程，开发者能够在其基础上进行简单便捷的开发。此外，SpringMVC遵循servlet世界里最简单的原则，即“">
+    <meta name="description" content="编码
+修改代码前，先查清楚修改前后的结果，然后再决定是否修改，最好在保留原来功能的基础上修改
+
+
+对比
+Android中的Service和Thread在多个Activity情况下的区别
+Android中TimeTask与Thread的生命周期在Activity中有何不同
+OnSaveInstance">
     
     
     
@@ -68,15 +74,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/16/SpringMVC学习篇（一）/" title="SpringMVC学习篇（一）" itemprop="url">SpringMVC学习篇（一）</a>
+      <a href="/2016/05/12/2016-05-12/" title="2016-05-12" itemprop="url">2016-05-12</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-08-16T04:52:44.000Z" itemprop="datePublished">2015-08-16</time>
-    更新日期:<time datetime="2015-08-16T10:11:12.000Z" itemprop="dateModified">2015-08-16</time>
+    <time datetime="2016-05-12T00:44:20.000Z" itemprop="datePublished">2016-05-12</time>
+    更新日期:<time datetime="2016-05-12T12:33:35.000Z" itemprop="dateModified">2016-05-12</time>
     
   </p>
 </header>
@@ -85,74 +91,55 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC简介"><span class="toc-number">1.</span> <span class="toc-text">SpringMVC简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需要解决的问题"><span class="toc-number">2.</span> <span class="toc-text">需要解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC做的事情"><span class="toc-number">3.</span> <span class="toc-text">SpringMVC做的事情</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解决开发问题"><span class="toc-number">3.1.</span> <span class="toc-text">解决开发问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集大成者"><span class="toc-number">3.2.</span> <span class="toc-text">集大成者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">4.</span> <span class="toc-text">设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC学习启发"><span class="toc-number">5.</span> <span class="toc-text">SpringMVC学习启发</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码"><span class="toc-number">1.</span> <span class="toc-text">编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对比"><span class="toc-number">2.</span> <span class="toc-text">对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#疑点"><span class="toc-number">3.</span> <span class="toc-text">疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进展"><span class="toc-number">4.</span> <span class="toc-text">进展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">5.</span> <span class="toc-text">调试</span></a></li></ol>
 		</div>
 		
-		<h2 id="SpringMVC简介"><a href="#SpringMVC简介" class="headerlink" title="SpringMVC简介"></a>SpringMVC简介</h2><hr>
-<p>  SpringMVC是一个基于请求-响应模型的开发框架，作为表现层框架，它遵循开闭原则，以原生的servlet框架对象为依托，通过合理的抽象，制订了严谨的请求处理流程，开发者能够在其基础上进行简单便捷的开发。此外，SpringMVC遵循servlet世界里最简单的原则，即“init-service-destory”。</p>
-<hr>
-<h2 id="需要解决的问题"><a href="#需要解决的问题" class="headerlink" title="需要解决的问题"></a>需要解决的问题</h2><hr>
-<ol>
-<li>框架到URL的映射</li>
-<li>HTTP请求参数的绑定</li>
-<li>HTTP响应的输入和输出</li>
+		<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><ol>
+<li>修改代码前，先查清楚修改前后的结果，然后再决定是否修改，最好在保留原来功能的基础上修改</li>
 </ol>
 <hr>
-<h2 id="SpringMVC做的事情"><a href="#SpringMVC做的事情" class="headerlink" title="SpringMVC做的事情"></a>SpringMVC做的事情</h2><blockquote>
-<p>清楚SpringMVC做的事情有助于开发。</p>
-</blockquote>
-<h3 id="解决开发问题"><a href="#解决开发问题" class="headerlink" title="解决开发问题"></a>解决开发问题</h3><hr>
-<p>弄清它解决的问题，需要从核心类DispatcherServlet开始学习，熟练其生命周期的过程。DispatcherServlet类作为前端控制器，在其实例的整个生命周期中，控制着HandlerMapping、HandlerExecutionChain、HandlerInterceptor、HandlerAdapter、ModelAndView等的协调工作，完成一次请求。<br>实际编码中，@Controller注解标注类的实例调用期间发生了什么，大致如下图所示：<br>  <img src="\img\SpringMVC架构.JPG" alt="SpringMVC架构图"></p>
-<ol>
-<li>根据xml配置文件，servlet实例在容器中完成init。</li>
-<li>Spring容器拦截请求，将请求交给DispatcherServlet实例。</li>
-<li>DispatcherServlet实例通过调用getHandler(HttpServletRequest request)方法遍历HandlerMapping类的实现列表，并将请求委托给内部框架处理单元HandlerMapping，生成HandlerExecutionChain对象，这步完成框架到URL的映射。</li>
-<li>前端控制器DispatcherServlet通过调用getHandlerAdapter(Object handler)方法遍历HandlerAdapter类的实现列表，返回true的HandlerAdapter对象，委托给内部框架处理单元HandlerAdapter进行处理。</li>
-<li>调用handler方法处理handler对象，返回包含视图和数据的ModelAndView对象到前端控制器。</li>
-<li>前端控制器DispatcherServlet委派核心接口view类调用render方法进行视图渲染。<br>前端控制器：DispatcherServlet负责SpringMVC具体编程元素的初始化策略，FrameworkServlet负责容器上下文的创建，HttpServletBean负责<init-param>配置元素的依赖注入</init-param></li>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><ol>
+<li>Android中的Service和Thread在多个Activity情况下的区别</li>
+<li>Android中TimeTask与Thread的生命周期在Activity中有何不同</li>
+<li>OnSaveInstanceState与OnPause调用时期的区别</li>
 </ol>
 <hr>
-<h3 id="集大成者"><a href="#集大成者" class="headerlink" title="集大成者"></a>集大成者</h3><hr>
-<p>  整个SpringMVC框架都是依托servlet容器元素设计的，除了解决开发的基本问题外，它还做了如下工作：</p>
-<ol>
-<li>开闭原则，具有良好的扩展性。</li>
-<li>汲取Struct2的精华，合理地设计拦截器。</li>
+<h2 id="疑点"><a href="#疑点" class="headerlink" title="疑点"></a>疑点</h2><ol>
+<li>Handler中handleMessage方法与Activity生命周期的关系</li>
+<li>TimeTask是在Activity中的哪个时期调用的</li>
+<li>TextView声明成static时为什么会发生initAddtionalStyle default，是不是在非UI线程里更新TextView造成的</li>
+<li>Activity从stop状态回到start状态后，不能操作非静态的TextView</li>
+<li>TimeTask在Activity的状态变为停止时，它会发生什么</li>
+<li>泛型循环队列转换异常</li>
+<li>数据处理速度小于数据增长速度会发生什么</li>
 </ol>
 <hr>
-<h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><hr>
-<ol>
-<li>父类抽象处理流程，子类给予具体实现方法。</li>
-<li>类中所有变量几乎都已接口形式给出，并没有与任何类绑定。</li>
-<li>使用模板方法模式，父类定义基础流程，子类实现模板方法扩展行为。</li>
+<h2 id="进展"><a href="#进展" class="headerlink" title="进展"></a>进展</h2><ol>
+<li>Activity中开启的Thread，如果没有执行完成，在Activity处于停止状态时，线程还会继续执行</li>
+<li>用户按下Back键，当前Activity会退出回退堆栈，并销毁，且之前的Activity会被回复，一旦Activity被销毁，系统将不再保存它的状态</li>
+<li>用户按下Home键，当前Activity会停止，进入后台，且系统会保存回退堆栈中所有任务的状态，一旦用户重新回到任务，栈顶的Activity会被恢复</li>
+<li>Activity可以在不同的任务中多次实例化，这可以解释从MainActivity再次回到DataView时会重新执行OnCreate，再次创建热点</li>
 </ol>
 <hr>
-<h2 id="SpringMVC学习启发"><a href="#SpringMVC学习启发" class="headerlink" title="SpringMVC学习启发"></a>SpringMVC学习启发</h2><hr>
-<ol>
-<li>在框架的基础上，通过派生的方法重写父类中的方法。</li>
-<li>熟练请求处理流程，添加适当的操作。</li>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><ol>
+<li>调试时，系统闪退，且但不调试的情况下不能捕获到发生异常的地方，可以通过单步调试进行排查，可能发生NullPointException</li>
 </ol>
 <hr>
-<p><a href="http://my.oschina.net/lichhao/blog?catalog=285356" target="_blank" rel="external">SpringMVC源码学习</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/俯瞰SpringMVC/">俯瞰SpringMVC</a>
+  <span></span> <a href="/tags/Android/">Android</a>
   </div>
 
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java架构/">Java架构</a>
-</div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2015/08/16/SpringMVC学习篇（一）/" data-title="SpringMVC学习篇（一） | 木心少年" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/05/12/2016-05-12/" data-title="2016-05-12 | 木心少年" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -161,14 +148,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/08/19/SpringMVC学习篇（二）/" title="SpringMVC学习篇（二）">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  SpringMVC学习篇（二）</span>
+
+<div class="next">
+<a href="/2016/05/11/git之路/"  title="git之路">
+ <strong>NEXT:</strong><br/> 
+ <span>git之路
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -182,7 +169,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC简介"><span class="toc-number">1.</span> <span class="toc-text">SpringMVC简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需要解决的问题"><span class="toc-number">2.</span> <span class="toc-text">需要解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC做的事情"><span class="toc-number">3.</span> <span class="toc-text">SpringMVC做的事情</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解决开发问题"><span class="toc-number">3.1.</span> <span class="toc-text">解决开发问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集大成者"><span class="toc-number">3.2.</span> <span class="toc-text">集大成者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">4.</span> <span class="toc-text">设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC学习启发"><span class="toc-number">5.</span> <span class="toc-text">SpringMVC学习启发</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码"><span class="toc-number">1.</span> <span class="toc-text">编码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对比"><span class="toc-number">2.</span> <span class="toc-text">对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#疑点"><span class="toc-number">3.</span> <span class="toc-text">疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进展"><span class="toc-number">4.</span> <span class="toc-text">进展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试"><span class="toc-number">5.</span> <span class="toc-text">调试</span></a></li></ol>
   </div>
 
 <div id="asidepart">
