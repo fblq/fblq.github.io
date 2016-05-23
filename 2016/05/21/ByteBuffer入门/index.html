@@ -4,24 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>2016-05-09 | 木心少年</title>
+    <title>ByteBuffer入门 | 木心少年</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhong.zhou">
     
-    <meta name="description" content="Android引入jar包目录为/src/lib。
-Android app 编译时出错原因可能有SDK版本、资源文件格式。
+    <meta name="description" content="核心变量
+capcity：buffer的容量，不可改变
+position：当前可读写的元素位置 
+limit：可读取元素的上限位置
+mark：临时标记，与reset搭配使用
 
 
-
-
-H5与hybrid混合的UI界面
-H5在APP和Web中的解析方式有什么不同
-
-
-
-
-多线程环境下，无论概率多小的事件总会有发生的机会。">
+常用方法
+clear（）：写buffer前使用
+flip（）：读buffer前调用
+rewind（）：重写buffer前调">
     
     
     
@@ -79,15 +77,15 @@ H5在APP和Web中的解析方式有什么不同
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/09/2016-05-09/" title="2016-05-09" itemprop="url">2016-05-09</a>
+      <a href="/2016/05/21/ByteBuffer入门/" title="ByteBuffer入门" itemprop="url">ByteBuffer入门</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-05-09T04:18:31.000Z" itemprop="datePublished">2016-05-09</time>
-    更新日期:<time datetime="2016-05-13T02:36:00.000Z" itemprop="dateModified">2016-05-13</time>
+    <time datetime="2016-05-21T08:34:12.000Z" itemprop="datePublished">2016-05-21</time>
+    更新日期:<time datetime="2016-05-21T08:45:38.000Z" itemprop="dateModified">2016-05-21</time>
     
   </p>
 </header>
@@ -96,24 +94,26 @@ H5在APP和Web中的解析方式有什么不同
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#核心变量"><span class="toc-number">1.</span> <span class="toc-text">核心变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用方法"><span class="toc-number">2.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据视图"><span class="toc-number">3.</span> <span class="toc-text">数据视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取数据"><span class="toc-number">4.</span> <span class="toc-text">获取数据</span></a></li></ol>
 		</div>
 		
-		<hr>
-<ol>
-<li>Android引入jar包目录为/src/lib。</li>
-<li>Android app 编译时出错原因可能有SDK版本、资源文件格式。</li>
+		<h2 id="核心变量"><a href="#核心变量" class="headerlink" title="核心变量"></a>核心变量</h2><ol>
+<li>capcity：buffer的容量，不可改变</li>
+<li>position：当前可读写的元素位置 </li>
+<li>limit：可读取元素的上限位置</li>
+<li>mark：临时标记，与reset搭配使用</li>
 </ol>
 <hr>
-<hr>
-<ol>
-<li>H5与hybrid混合的UI界面</li>
-<li>H5在APP和Web中的解析方式有什么不同</li>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><ol>
+<li>clear（）：写buffer前使用</li>
+<li>flip（）：读buffer前调用</li>
+<li>rewind（）：重写buffer前调用</li>
 </ol>
 <hr>
+<h2 id="数据视图"><a href="#数据视图" class="headerlink" title="数据视图"></a>数据视图</h2><p>1.</p>
 <hr>
-<ol>
-<li>多线程环境下，无论概率多小的事件总会有发生的机会。</li>
+<h2 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h2><ol>
+<li>编码：byteBuffer.order(ByteOrder.nativeOrder()).getFloat();</li>
 </ol>
 <hr>
   
@@ -122,20 +122,20 @@ H5在APP和Web中的解析方式有什么不同
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/UI疑点/">UI疑点</a>
+  <span></span> <a href="/tags/NEW-IO/">NEW_IO</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Android/">Android</a>
+  <a class="article-category-link" href="/categories/JAVA/">JAVA</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/05/09/2016-05-09/" data-title="2016-05-09 | 木心少年" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/05/21/ByteBuffer入门/" data-title="ByteBuffer入门 | 木心少年" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -145,18 +145,18 @@ H5在APP和Web中的解析方式有什么不同
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/05/10/2016-05-10/" title="2016-05-10">
+ <a href="/2016/05/21/Channel与Buffer/" title="Channel与Buffer">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  2016-05-10</span>
+  Channel与Buffer</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/05/06/2016-05-06/"  title="2016-05-06">
+<a href="/2016/05/16/2016-05-16/"  title="2016-05-16">
  <strong>NEXT:</strong><br/> 
- <span>2016-05-06
+ <span>2016-05-16
 </span>
 </a>
 </div>
@@ -173,7 +173,7 @@ H5在APP和Web中的解析方式有什么不同
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#核心变量"><span class="toc-number">1.</span> <span class="toc-text">核心变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用方法"><span class="toc-number">2.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据视图"><span class="toc-number">3.</span> <span class="toc-text">数据视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取数据"><span class="toc-number">4.</span> <span class="toc-text">获取数据</span></a></li></ol>
   </div>
 
 <div id="asidepart">

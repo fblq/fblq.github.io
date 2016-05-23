@@ -4,24 +4,16 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>2016-05-09 | 木心少年</title>
+    <title>2016-05-16 | 木心少年</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhong.zhou">
     
-    <meta name="description" content="Android引入jar包目录为/src/lib。
-Android app 编译时出错原因可能有SDK版本、资源文件格式。
-
-
-
-
-H5与hybrid混合的UI界面
-H5在APP和Web中的解析方式有什么不同
-
-
-
-
-多线程环境下，无论概率多小的事件总会有发生的机会。">
+    <meta name="description" content="bug
+多个线程并发访问一个集合，发生并发修改异常。
+线程A采集数据，采集到50个数据时，线程B去处理这50个数据（最好能获取队头和队尾元素），B线程处理完数据后进行清理，最后通知线程A去采集数据，一直这样循环。
+await和signal方法
+线程安全集合的误区，ConcurrentLinkedQu">
     
     
     
@@ -79,15 +71,15 @@ H5在APP和Web中的解析方式有什么不同
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/09/2016-05-09/" title="2016-05-09" itemprop="url">2016-05-09</a>
+      <a href="/2016/05/16/2016-05-16/" title="2016-05-16" itemprop="url">2016-05-16</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-05-09T04:18:31.000Z" itemprop="datePublished">2016-05-09</time>
-    更新日期:<time datetime="2016-05-13T02:36:00.000Z" itemprop="dateModified">2016-05-13</time>
+    <time datetime="2016-05-16T00:57:52.000Z" itemprop="datePublished">2016-05-16</time>
+    更新日期:<time datetime="2016-05-18T13:05:06.000Z" itemprop="dateModified">2016-05-18</time>
     
   </p>
 </header>
@@ -96,24 +88,36 @@ H5在APP和Web中的解析方式有什么不同
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#bug"><span class="toc-number">1.</span> <span class="toc-text">bug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#—"><span class="toc-number">2.</span> <span class="toc-text">—</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#待修改的地方"><span class="toc-number">3.</span> <span class="toc-text">待修改的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程"><span class="toc-number">4.</span> <span class="toc-text">多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动IEDA工程"><span class="toc-number">5.</span> <span class="toc-text">启动IEDA工程</span></a></li></ol>
 		</div>
 		
-		<hr>
+		<h2 id="bug"><a href="#bug" class="headerlink" title="bug"></a>bug</h2><ol>
+<li>多个线程并发访问一个集合，发生并发修改异常。</li>
+<li>线程A采集数据，采集到50个数据时，线程B去处理这50个数据（最好能获取队头和队尾元素），B线程处理完数据后进行清理，最后通知线程A去采集数据，一直这样循环。</li>
+<li>await和signal方法</li>
+<li>线程安全集合的误区，ConcurrentLinkedQueue、CopyOnWriteList在生产者、消费者场景下的应用局限性。</li>
+<li>复制与引用在多线程下的区别。</li>
+<li>set一个引用到集合中，集合大小虽然增长，但是集合的数据一样，各个元素共用一个存储空间</li>
+<li>在一个定时任务里更新Android组件，APP会出现莫名其妙的错误，跳转找不到parent、app启动后直接down等</li>
+</ol>
+<h2 id="—"><a href="#—" class="headerlink" title="—"></a>—</h2><p>Android权限</p>
 <ol>
-<li>Android引入jar包目录为/src/lib。</li>
-<li>Android app 编译时出错原因可能有SDK版本、资源文件格式。</li>
+<li>写文件的路径/data/data/应用包名、/storage/emulated/0/<br>2。 在Android里实现写文件需要在文件magnifest.xml添加WriteStorage的权限</li>
 </ol>
 <hr>
-<hr>
-<ol>
-<li>H5与hybrid混合的UI界面</li>
-<li>H5在APP和Web中的解析方式有什么不同</li>
+<h2 id="待修改的地方"><a href="#待修改的地方" class="headerlink" title="待修改的地方"></a>待修改的地方</h2><ol>
+<li>单次处理四元数的长度可以从50升为1000</li>
+<li>控制时序的前提下，减少线程切换的频率，权衡数据的实时性和准确性</li>
+<li>跌倒的历史数据存储有问题，柱形图一直只有一根柱子</li>
+<li>行走和跑步没有数据，可能是加速度几何均值的峰值求取有问题</li>
 </ol>
 <hr>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><ol>
+<li>消费者、生产者模式的实现方式：Guava消息桶、Lock+Condition封装一个集合</li>
+</ol>
 <hr>
-<ol>
-<li>多线程环境下，无论概率多小的事件总会有发生的机会。</li>
+<h2 id="启动IEDA工程"><a href="#启动IEDA工程" class="headerlink" title="启动IEDA工程"></a>启动IEDA工程</h2><ol>
+<li>setting.gradle中的include ‘:app’,神来之笔</li>
 </ol>
 <hr>
   
@@ -122,7 +126,7 @@ H5在APP和Web中的解析方式有什么不同
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/UI疑点/">UI疑点</a>
+  <span></span> <a href="/tags/多线程/">多线程</a>
   </div>
 
 
@@ -135,7 +139,7 @@ H5在APP和Web中的解析方式有什么不同
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/05/09/2016-05-09/" data-title="2016-05-09 | 木心少年" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/05/16/2016-05-16/" data-title="2016-05-16 | 木心少年" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -145,18 +149,18 @@ H5在APP和Web中的解析方式有什么不同
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/05/10/2016-05-10/" title="2016-05-10">
+ <a href="/2016/05/21/ByteBuffer入门/" title="ByteBuffer入门">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  2016-05-10</span>
+  ByteBuffer入门</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/05/06/2016-05-06/"  title="2016-05-06">
+<a href="/2016/05/13/2016-05-13/"  title="2016-05-13">
  <strong>NEXT:</strong><br/> 
- <span>2016-05-06
+ <span>2016-05-13
 </span>
 </a>
 </div>
@@ -173,7 +177,7 @@ H5在APP和Web中的解析方式有什么不同
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#bug"><span class="toc-number">1.</span> <span class="toc-text">bug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#—"><span class="toc-number">2.</span> <span class="toc-text">—</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#待修改的地方"><span class="toc-number">3.</span> <span class="toc-text">待修改的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程"><span class="toc-number">4.</span> <span class="toc-text">多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动IEDA工程"><span class="toc-number">5.</span> <span class="toc-text">启动IEDA工程</span></a></li></ol>
   </div>
 
 <div id="asidepart">
