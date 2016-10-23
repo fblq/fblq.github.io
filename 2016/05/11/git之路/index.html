@@ -9,16 +9,14 @@
     
     <meta name="author" content="zhong.zhou">
     
-    <meta name="description" content="git疑点
+    <meta name="description" content="问题：
+
+执行git checkout – filename后，如何从暂存区中恢复提交的文件
+指定版本号恢复文件名，git log [fileName] 、 git reset [fileVersion] [fileName]
+
+git疑点
 origin、HEAD的作用
-git checkout、git revert、git reset的区别
-怎么查看HEAD信息
-git checkout –track origin/name的作用
-分叉分支指定其中一条分支的版本怎么进行分支合并
-
-
-git提交
-指定远程分支进行提交：git">
+git checkout、g">
     
     
     
@@ -84,7 +82,7 @@ git提交
     </p>
   <p class="article-time">
     <time datetime="2016-05-11T05:21:18.000Z" itemprop="datePublished">2016-05-11</time>
-    更新日期:<time datetime="2016-05-13T12:20:21.000Z" itemprop="dateModified">2016-05-13</time>
+    更新日期:<time datetime="2016-10-18T11:35:13.000Z" itemprop="dateModified">2016-10-18</time>
     
   </p>
 </header>
@@ -93,10 +91,15 @@ git提交
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git疑点"><span class="toc-number">1.</span> <span class="toc-text">git疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git提交"><span class="toc-number">2.</span> <span class="toc-text">git提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git查看"><span class="toc-number">3.</span> <span class="toc-text">git查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git删除"><span class="toc-number">4.</span> <span class="toc-text">git删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-修改本地仓库对应的远程仓库：git-remote-set-url-origin-remote-project-url"><span class="toc-number">5.</span> <span class="toc-text">1. 修改本地仓库对应的远程仓库：git remote set-url origin remote_project_url</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git新建"><span class="toc-number">6.</span> <span class="toc-text">git新建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git合并"><span class="toc-number">7.</span> <span class="toc-text">git合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git切换"><span class="toc-number">8.</span> <span class="toc-text">git切换</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git疑点"><span class="toc-number">1.</span> <span class="toc-text">git疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git提交"><span class="toc-number">2.</span> <span class="toc-text">git提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git查看"><span class="toc-number">3.</span> <span class="toc-text">git查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git删除"><span class="toc-number">4.</span> <span class="toc-text">git删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git新建"><span class="toc-number">5.</span> <span class="toc-text">git新建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git合并"><span class="toc-number">6.</span> <span class="toc-text">git合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git切换"><span class="toc-number">7.</span> <span class="toc-text">git切换</span></a></li></ol>
 		</div>
 		
-		<h2 id="git疑点"><a href="#git疑点" class="headerlink" title="git疑点"></a>git疑点</h2><ol>
+		<p>问题：</p>
+<ol>
+<li>执行git checkout – filename后，如何从暂存区中恢复提交的文件</li>
+<li>指定版本号恢复文件名，git log [fileName] 、 git reset [fileVersion] [fileName]</li>
+</ol>
+<h2 id="git疑点"><a href="#git疑点" class="headerlink" title="git疑点"></a>git疑点</h2><ol>
 <li>origin、HEAD的作用</li>
 <li>git checkout、git revert、git reset的区别</li>
 <li>怎么查看HEAD信息</li>
@@ -124,7 +127,13 @@ git提交
 </ol>
 <hr>
 <p>git修改</p>
-<h2 id="1-修改本地仓库对应的远程仓库：git-remote-set-url-origin-remote-project-url"><a href="#1-修改本地仓库对应的远程仓库：git-remote-set-url-origin-remote-project-url" class="headerlink" title="1. 修改本地仓库对应的远程仓库：git remote set-url origin remote_project_url"></a>1. 修改本地仓库对应的远程仓库：git remote set-url origin remote_project_url</h2><hr>
+<ol>
+<li>修改本地仓库对应的远程仓库：git remote set-url origin remote_project_url</li>
+<li>撤销修改： git checkout – fileName</li>
+<li>修改分支名字：git branch -m old_branch_name new_branch_name</li>
+</ol>
+<hr>
+<hr>
 <h2 id="git新建"><a href="#git新建" class="headerlink" title="git新建"></a>git新建</h2><ol>
 <li>指定远程分支在本地新建分支,同时切换到新分支：git checkout -b new_branch origin/remote_branch_name</li>
 <li>指定分支的历史版本新建分支：git branch new_branch 358c</li>
@@ -190,7 +199,7 @@ git提交
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git疑点"><span class="toc-number">1.</span> <span class="toc-text">git疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git提交"><span class="toc-number">2.</span> <span class="toc-text">git提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git查看"><span class="toc-number">3.</span> <span class="toc-text">git查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git删除"><span class="toc-number">4.</span> <span class="toc-text">git删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-修改本地仓库对应的远程仓库：git-remote-set-url-origin-remote-project-url"><span class="toc-number">5.</span> <span class="toc-text">1. 修改本地仓库对应的远程仓库：git remote set-url origin remote_project_url</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git新建"><span class="toc-number">6.</span> <span class="toc-text">git新建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git合并"><span class="toc-number">7.</span> <span class="toc-text">git合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git切换"><span class="toc-number">8.</span> <span class="toc-text">git切换</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git疑点"><span class="toc-number">1.</span> <span class="toc-text">git疑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git提交"><span class="toc-number">2.</span> <span class="toc-text">git提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git查看"><span class="toc-number">3.</span> <span class="toc-text">git查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git删除"><span class="toc-number">4.</span> <span class="toc-text">git删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git新建"><span class="toc-number">5.</span> <span class="toc-text">git新建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git合并"><span class="toc-number">6.</span> <span class="toc-text">git合并</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git切换"><span class="toc-number">7.</span> <span class="toc-text">git切换</span></a></li></ol>
   </div>
 
 <div id="asidepart">
