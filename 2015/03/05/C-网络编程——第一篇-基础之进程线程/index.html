@@ -1,0 +1,667 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>C#网络编程——第一篇 基础之进程线程 | 木心少年</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhong.zhou">
+    
+    <meta name="description" content="在C#的网络编程中，进程和线程是必备的基础知识，同时也是一个重点，所以我们要好好的掌握一下。
+#一：概念
+首先我们要知道什么是”进程”，什么是“线程”，好，查一下baike。
+  进程：是一个具有一定独立功能的程序关于某个数据集合的一次活动。它是操作系统动态执行的基本单元，
+在传统的操作系统中，进程">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/author.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/author.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="木心少年" title="木心少年"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="木心少年">木心少年</a></h1>
+				<h2 class="blog-motto">问题从哪来就该往哪去</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">简介</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/05/C-网络编程——第一篇-基础之进程线程/" title="C#网络编程——第一篇 基础之进程线程" itemprop="url">C#网络编程——第一篇 基础之进程线程</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-05T02:46:02.000Z" itemprop="datePublished">2015-03-05</time>
+    更新日期:<time datetime="2015-03-10T01:35:04.000Z" itemprop="dateModified">2015-03-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p> 在C#的网络编程中，进程和线程是必备的基础知识，同时也是一个重点，所以我们要好好的掌握一下。</p>
+<p>#一：概念</p>
+<pre><code>首先我们要知道什么是”进程”，什么是“线程”，好，查一下baike。
+</code></pre><p>  进程：是一个具有一定独立功能的程序关于某个数据集合的一次活动。它是操作系统动态执行的基本单元，</p>
+<pre><code>在传统的操作系统中，进程既是基本的分配单元，也是基本的执行单元。
+</code></pre><p>  线程：是”进程”中某个单一顺序的控制流。</p>
+<p>关于这两个概念，大家稍微有个印象就行了，防止以后被面试官问到。</p>
+<p>#二：进程</p>
+<pre><code>framework里面对“进程”的基本操作的封装还是蛮好的，能够满足我们实际开发中的基本应用。
+</code></pre><p>##<1> 获取进程信息</1></p>
+<pre><code>framework中给我们获取进程的方式还是蛮多的，即可以按照Name获取，也可以按照ID获取，也可以获取本地和远程的进程信息。
+</code></pre><pre><code>public Process[] GetProcess(string ip = "")
+         {
+             if (string.IsNullOrEmpty(ip))
+                 return Process.GetProcesses();
+
+             return Process.GetProcesses(ip);
+         }
+    Process process = Process.GetProcessById(Convert.ToInt32(processID));</code></pre>
+
+<p>##<2> 启动和停止进程</2></p>
+<p>  其实这个也没啥好说的，不过有一个注意点就是Process中的”kill”和”CloseMainWindow”的区别。</p>
+<pre><code>windowMainWindow:  当我们打开的Process是一个有界面的应用程序时，推荐使用此方法，它相当于点击了应用程序的关闭按钮，是一个有序的
+终止应用程序的操作，而不像kill那么暴力。   
+kill:  根据这个单词估计大家都知道啥意思吧，它的作用就是强制关闭我们打开的Process，往往会造成就是我们数据的丢失，所以
+说在万不得已的情况下不要使用kill，当然在无图形界面的应用程序中，kill是唯一能够结束Process的一个策略。
+</code></pre><p>#<3> 进程操作的一个演示</3></p>
+<pre><code>public class ProgessHelper
+    {
+        //主操作流程
+        public static void MainProcess()
+        {
+            ProgessHelper helper = new ProgessHelper();
+
+            var result = helper.GetProcess();
+
+            helper.ShowProcess(result.Take(10).ToArray());
+
+            Console.Write("\n请输入您要查看的进程：");
+
+            helper.ShowProcessSingle(Console.ReadLine());
+
+            Console.Write("\n请输入您要开启的程序：\t");
+
+            var name = helper.StartProcess(Console.ReadLine());
+
+
+            Console.WriteLine("程序已经开启，是否关闭？(0,1)");
+
+            if (Console.ReadLine() == "1")
+            {
+                helper.StopProcess(name);
+
+                Console.WriteLine("关闭成功。");
+            }
+        }
+
+        #region 获取进程
+        /// <summary>
+/// 获取进程
+/// </summary>
+/// <param name="ip">
+/// <returns></returns>
+        public Process[] GetProcess(string ip = "")
+        {
+            if (string.IsNullOrEmpty(ip))
+                return Process.GetProcesses();
+
+            return Process.GetProcesses(ip);
+        }
+        #endregion
+
+        #region 查看进程
+        /// <summary>
+/// 查看进程
+/// </summary>
+/// <param name="process">
+        public void ShowProcess(Process[] process)
+        {
+            Console.WriteLine("进程ID\t进程名称\t物理内存\t\t启动时间\t文件名");
+
+            foreach (var p in process)
+            {
+                try
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}M\t\t{3}\t{4}", p.Id, p.ProcessName.Trim(), p.WorkingSet64 / 1024.0f / 1024.0f,
+                    p.StartTime, p.MainModule.FileName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+        #endregion
+
+        #region 根据ID查看指定的进程
+        /// <summary>
+/// 根据ID查看指定的进程
+/// </summary>
+/// <param name="processID">
+        public void ShowProcessSingle(string processID)
+        {
+            Process process = Process.GetProcessById(Convert.ToInt32(processID));
+
+            Console.WriteLine("\n\n您要查看的进程详细信息如下：\n");
+
+            try
+            {
+                var module = process.MainModule;
+
+                Console.WriteLine("文件名:{0}\n版本{1}\n描叙{2}\n语言:{3}", module.FileName, module.FileVersionInfo.FileVersion,
+                                                                           module.FileVersionInfo.FileDescription,
+                                                                           module.FileVersionInfo.Language);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        #endregion
+
+        #region 进程开启
+        /// <summary>
+/// 进程开启
+/// </summary>
+/// <param name="fileName">
+/// <returns></returns>
+        public string StartProcess(string fileName)
+        {
+            Process process = new Process();
+
+            process.StartInfo = new ProcessStartInfo(fileName);
+
+            process.Start();
+
+            return process.ProcessName;
+        }
+        #endregion
+
+        #region 终止进程
+        /// <summary>
+/// 终止进程
+/// </summary>
+/// <param name="name">
+        public void StopProcess(string name)
+        {
+            var process = Process.GetProcessesByName(name).FirstOrDefault();
+
+            try
+            {
+                process.CloseMainWindow();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        #endregion
+    }
+</code></pre>
+
+<p>&nbsp;</p><br><p><img src="http://pic002.cnblogs.com/images/2012/214741/2012010301472717.png" alt=""></p><br><p>&nbsp;</p>
+
+
+<p>快看，PPTV真的被我打开了，嗯，8错，Process还是蛮好玩的。</p>
+<p>这里要注意一点：</p>
+<pre><code>我们在59行中加上了Try Catch，这是因为每个Process都有一个MainModule属性，但并不是每一个MainModule都能被C#获取，
+
+如会出现如下的“拒绝访问”。
+</code></pre><p><img src="http://pic002.cnblogs.com/images/2012/214741/2012010301555151.png" alt=""></p><br><p><br>&nbsp;</p>
+
+
+<p>#三： 线程</p>
+<pre><code>同样线程的相关操作也已经被framework里面的Thread完美的封装，大大简化了我们的工作量，常用的操作如下
+</code></pre><p>   <1> 启动线程。</1></p>
+<p>   <2> 终止线程。</2></p>
+<p>   <3> 暂停线程。</3></p>
+<p>   <4> 合并线程。</4></p>
+<pre><code>   这个要解释一下，比如：t1线程在执行过程中需要等待t2执行完才能继续执行，此时我们就要将t2合并到t1中去，也就是在
+
+t1的代码块中写上t2.Join（）即可。同样Join中也可以加上等待t2执行的时间，不管t2是否执行完毕。
+</code></pre><p>   <5> 线程同步</5></p>
+<pre><code>   估计大家也知道，多线程解决了系统的吞吐量和响应时间，同时也给我们留下了比如死锁，资源争用等问题，那么我们如何
+
+ 解决这些问题呢？呵呵，Anders Hejlsberg 这位老前辈已经给我们提供了很多的实现同步线程的类，比如Mutex，Monitor，
+
+ Interlocked和AutoResetEvent，当然在实际应用中，我们还是喜欢使用简化版的lock，因为这玩意能够使编程简化，同时使
+
+程序看起来简洁明了。 
+</code></pre><p> <6>  同样我也举个例子</6></p>
+<pre><code>public class ThreadHelper
+    {
+        public static void MainThread()
+        {
+
+            ThreadHelper helper = new ThreadHelper(100);
+
+            Thread[] thread = new Thread[20];
+
+            for (int i = 0; i < 20; i++)
+            {
+                thread[i] = new Thread(helper.DoTransactions);
+
+                thread[i].Name = "线程" + i;
+
+            }
+
+            foreach (var single in thread)
+            {
+                single.Start();
+            }
+        }
+
+        int balance;
+
+        object obj = new object();
+
+        public ThreadHelper(int balance)
+        {
+            this.balance = balance;
+        }
+
+        #region 取款操作
+        /// <summary>
+/// 取款操作
+/// </summary>
+/// <param name="amount">
+        public void WithDraw(int amount)
+        {
+            lock (obj)
+            {
+                if (balance <= 0)="" {="" console.writeline("哈哈，已经取完了");="" return;="" }="" if="" (balance="">= amount)
+                {
+                    Console.WriteLine("取款前余额:{0},取款：{1},还剩余额:{2}", balance, amount, balance - amount);
+                    balance = balance - amount;
+                }
+                else
+                {
+                    Console.WriteLine("取款前余额:{0},取款：{1},还剩余额:{2}", balance, balance, balance = 0);
+                }
+            }
+        }
+        #endregion
+
+        #region 自动取款操作
+        /// <summary>
+/// 自动取款操作
+/// </summary>
+        public void DoTransactions(object obj)
+        {
+            int random = new Random().Next(4, 10);
+
+            Thread.Sleep(5000);
+
+            WithDraw(random);
+        }
+        #endregion
+    }
+</=></code></pre>
+
+<p>当我们加上lock的时候一切正常，但是当我们把lock去掉的时候，看看线程们会有“争用资源”的现象吗？，在下图中可以看到，出现了如下的现象，</p>
+<p>当然这不是我想看到的结果，如果在实际应用中会是多么难找的bug。</p>
+<p><img src="http://pic002.cnblogs.com/images/2012/214741/2012010302215536.png" alt=""></p><br><p>&nbsp;</p>
+
+
+<p><8> 线程池</8></p>
+<pre><code>上面的例子中，我创建了20个线程来完成任务，比如在某些实际应用中，Client端的每个请求Server都需要创建一个线程来处理，
+
+那么当线程很多的时候并不是一件好事情，这会导致过度的使用系统资源而耗尽内存，那么自然就会引入“线程池”。
+
+**线程池：是一个在后台执行多个任务的集合，他封装了我们对线程的基本操作，我们能做的就只要把“入口方法”丢给线程池就行了。
+
+特点：  线程池有最大线程数限制，大小在不同的机器上有区别，当池中的线程都是繁忙状态，后入的方法就会排队，直至池中有空闲的线程来处理。**
+
+代码： 修改后如下
+</code></pre><pre><code>public static void MainThread()
+        {
+
+            ThreadHelper helper = new ThreadHelper(100); //创建100个线程执行的对象
+
+            for (int i = 0; i < 20; i++)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(helper.DoTransactions));  //对象要执行的方法排队等待空闲线程来处理
+            }
+
+            //Thread[] thread = new Thread[20];
+
+            //for (int i = 0; i < 20; i++)
+            //{
+            //    thread[i] = new Thread(helper.DoTransactions);
+
+            //    thread[i].Name = "线程" + i;
+
+            //}
+
+            //foreach (var single in thread)
+            //{
+            //   single.Start()
+            //}
+        }
+</code></pre>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/C-网络编程——第一篇-基础之进程线程/">C#网络编程——第一篇 基础之进程线程</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/网络编程/">网络编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2015/03/05/C-网络编程——第一篇-基础之进程线程/" data-title="C#网络编程——第一篇 基础之进程线程 | 木心少年" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/07/Socket通信原理与实践/" title="Socket通信原理与实践">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Socket通信原理与实践</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>6</sup></a></li>
+		
+			<li><a href="/categories/JAVA/" title="JAVA">JAVA<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java架构/" title="Java架构">Java架构<sup>2</sup></a></li>
+		
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		
+			<li><a href="/categories/入门基础/" title="入门基础">入门基础<sup>1</sup></a></li>
+		
+			<li><a href="/categories/后端/" title="后端">后端<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础概念/" title="基础概念">基础概念<sup>7</sup></a></li>
+		
+			<li><a href="/categories/大数据处理/" title="大数据处理">大数据处理<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/无线通信/" title="无线通信">无线通信<sup>1</sup></a></li>
+		
+			<li><a href="/categories/生活小记/" title="生活小记">生活小记<sup>1</sup></a></li>
+		
+			<li><a href="/categories/算法学习/" title="算法学习">算法学习<sup>1</sup></a></li>
+		
+			<li><a href="/categories/编程基础/" title="编程基础">编程基础<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程练习/" title="编程练习">编程练习<sup>8</sup></a></li>
+		
+			<li><a href="/categories/网络编程/" title="网络编程">网络编程<sup>6</sup></a></li>
+		
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://wsgzao.github.io/" target="_blank" title="wsgzao">wsgzao's blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m zhong.zhou. This is my blog on Gitbub. <br/>
+			no more no better</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5607185050" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/fblq" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2018 
+		
+		<a href="http://yoursite.com" target="_blank" title="zhong.zhou">zhong.zhou</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"fblq"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="���ض���"><img src="/img/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+  </body>
+</html>

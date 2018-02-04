@@ -1,0 +1,426 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>操作系统的基础知识 | 木心少年</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhong.zhou">
+    
+    <meta name="description" content="#操作系统的结构：
+1. 功能服务为观点的系统结构
+2. 资源管理为观点的系统结构
+3. 微内核的系统结构
+#基本概念：
+1. 进程和线程
+2. 页面的换入换出（时间换空间）
+3. 页故障的原因（程序错误、缺页错误、保护措施）
+4. 进程间的通信（消息队列）
+5. 进程并发执行的机制（上下文切换）
+">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/author.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/author.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="木心少年" title="木心少年"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="木心少年">木心少年</a></h1>
+				<h2 class="blog-motto">问题从哪来就该往哪去</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">简介</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/10/操作系统的基础知识/" title="操作系统的基础知识" itemprop="url">操作系统的基础知识</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-10T05:46:41.000Z" itemprop="datePublished">2015-03-10</time>
+    更新日期:<time datetime="2015-03-13T06:24:00.000Z" itemprop="dateModified">2015-03-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>#操作系统的结构：</p>
+<pre><code>1. 功能服务为观点的系统结构
+2. 资源管理为观点的系统结构
+3. 微内核的系统结构
+</code></pre><p>#基本概念：</p>
+<pre><code>1. 进程和线程
+2. 页面的换入换出（时间换空间）
+3. 页故障的原因（程序错误、缺页错误、保护措施）
+4. 进程间的通信（消息队列）
+5. 进程并发执行的机制（上下文切换）
+6. 进程调度管理（等待、就绪、阻塞、执行）
+7. 死锁发生的条件（互斥资源、持有和等待资源、资源不可抢占利用、循环等待资源）
+8. 死锁预防（打破死锁发生的四个必要条件中的一个或多个）
+9. 死锁避免（资源预分配_安全序列_银行家算法）
+10. 死锁监测（资源分配图） 
+11. 死锁恢复（撤销进程、进程回滚）
+12. 死锁与饥饿
+13. 磁盘管理（冗余磁盘阵列、分布式数据管理策略、带区集和镜像）
+</code></pre><p>##1. 进程与线程<br>    进程是一个具有独立功能的程序关于某个数据集合的行动，它是操作系统动态执行的基本单位，也是资源分配的基本单位。<br>    线程是进程中单一顺序的控制流，是系统调度的的基本单位。</p>
+<p>##2. 页面的换入换出<br>    关于物理页面的换入换出，其实其主要的目的也就是当物理内存不够使用的时候，将不常用到的内存页面交换到硬盘上，以保证程序能够正常运行。</p>
+<p>##8. 死锁预防</p>
+<pre><code>〈1〉打破互斥条件。即允许进程同时访问某些资源。但是，有的资源是不允许被同时访问的，像打印机等等，这是由资源本身的属性所决定的。所以，这种办法并无实用价值。
+
+
+〈2〉打破不可抢占条件。即允许进程强行从占有者那里夺取某些资源。就是说，当一个进程已占有了某些资源，它又申请新的资源，但不能立即被满足时，它必须释放所占有的全部资源，以后再重新申请。它所释放的资源可以分配给其它进程。这就相当于该进程占有的资源被隐蔽地强占了。这种预防死锁的方法实现起来困难，会降低系统性能。    
+
+〈3〉打破占有且申请条件。可以实行资源预先分配策略。即进程在运行前一次性地向系统申请它所需要的全部资源。如果某个进程所需的全部资源得不到满足，则不分配任何资源，此进程暂不运行。只有当系统能够满足当前进程的全部资源需求时，才一次性地将所申请的资源全部分配给该进程。由于运行的进程已占有了它所需的全部资源，所以不会发生占有资源又申请资源的现象，因此不会发生死锁。但是，这种策略也有如下缺点：
+
+    （1）在许多情况下，一个进程在执行之前不可能知道它所需要的全部资源。这是由于进程在执行时是动态的，不可预测的；
+    （2）资源利用率低。无论所分资源何时用到，一个进程只有在占有所需的全部资源后才能执行。即使有些资源最后才被该进程用到一次，但该进程在生存期间却一直占有它们，造成长期占着不用的状况。这显然是一种极大的资源浪费；
+    （3）降低了进程的并发性。因为资源有限，又加上存在浪费，能分配到所需全部资源的进程个数就必然少了。    
+
+
+
+（4）打破循环等待条件，实行资源有序分配策略。采用这种策略，即把资源事先分类编号，按号分配，使进程在申请，占用资源时不会形成环路。所有进程对资源的请求必须严格按资源序号递增的顺序提出。进程占用了小号资源，才能申请大号资源，就不会产生环路，从而预防了死锁。这种策略与前面的策略相比，资源的利用率和系统吞吐量都有很大提高，但是也存在以下缺点：
+
+    （1）限制了进程对资源的请求，同时给系统中所有资源合理编号也是件困难事，并增加了系统开销；
+    （2）为了遵循按编号申请的次序，暂不使用的资源也需要提前申请，从而增加了进程对资源的占用时间。
+</code></pre><p>##10. 死锁与饥饿</p>
+<pre><code>在多道程序系统中，同时有多个进程并发运行，共享系统资源，从而提高了系统资源利用率，提高了系统的处理能力。但是，若对资源的管理、分配和使用不当，则会产生死锁或是饥饿。所谓死锁是指在多道程序系统中，一组进程中的每一个进程军无限期等待被该组进程中的另一个进程所占有且永远不会释放的资源。饥饿是指系统不能保证某个进程的等待时间上界，从而使该进程长时间等待，当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿。当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死。
+</code></pre><p>死锁与饿死有一定相同点：二者都是由于竞争资源而引起的。但又有明显差别：</p>
+<pre><code>(1) 从进程状态考虑，死锁进程都处于等待状态，忙式等待(处于运行或就绪状态)的进程并非处于等待状态，但却可能被饿死；
+(2) 死锁进程等待永远不会被释放的资源，饿死进程等待会被释放但却不会分配给自己的资源，表现为等待时限没有上界(排队等待或忙式等待)；
+(3) 死锁一定发生了循环等待，而饿死则不然。这也表明通过资源分配图可以检测死锁存在与否，但却不能检测是否有进程饿死；
+(4) 死锁一定涉及多个进程，而饥饿或被饿死的进程可能只有一个。
+(5)在饥饿的情形下，系统中有至少一个进程能正常运行，只是饥饿进程得不到执行机会。而死锁则可能会最终使整个系统陷入死锁并崩溃。
+总之，死锁和饥饿是操作系统中亟待解决的重要问题，发明出一个令人满意的完善的解决方法是一个诱人的且永远不会过时的课题。
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/操作系统/">操作系统</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/基础概念/">基础概念</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2015/03/10/操作系统的基础知识/" data-title="操作系统的基础知识 | 木心少年" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/10/解决信道占用策略/" title="解决信道占用策略">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  解决信道占用策略</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/10/Socket网络编程常见异常及解决方法/"  title="Socket网络编程常见异常及解决方法">
+ <strong>NEXT:</strong><br/> 
+ <span>Socket网络编程常见异常及解决方法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>6</sup></a></li>
+		
+			<li><a href="/categories/JAVA/" title="JAVA">JAVA<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Java架构/" title="Java架构">Java架构<sup>2</sup></a></li>
+		
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		
+			<li><a href="/categories/入门基础/" title="入门基础">入门基础<sup>1</sup></a></li>
+		
+			<li><a href="/categories/后端/" title="后端">后端<sup>1</sup></a></li>
+		
+			<li><a href="/categories/基础概念/" title="基础概念">基础概念<sup>7</sup></a></li>
+		
+			<li><a href="/categories/大数据处理/" title="大数据处理">大数据处理<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/无线通信/" title="无线通信">无线通信<sup>1</sup></a></li>
+		
+			<li><a href="/categories/生活小记/" title="生活小记">生活小记<sup>1</sup></a></li>
+		
+			<li><a href="/categories/算法学习/" title="算法学习">算法学习<sup>1</sup></a></li>
+		
+			<li><a href="/categories/编程基础/" title="编程基础">编程基础<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程练习/" title="编程练习">编程练习<sup>8</sup></a></li>
+		
+			<li><a href="/categories/网络编程/" title="网络编程">网络编程<sup>6</sup></a></li>
+		
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://wsgzao.github.io/" target="_blank" title="wsgzao">wsgzao's blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m zhong.zhou. This is my blog on Gitbub. <br/>
+			no more no better</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5607185050" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/fblq" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2018 
+		
+		<a href="http://yoursite.com" target="_blank" title="zhong.zhou">zhong.zhou</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"fblq"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="���ض���"><img src="/img/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+  </body>
+</html>
