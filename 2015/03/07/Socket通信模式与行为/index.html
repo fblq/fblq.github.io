@@ -9,7 +9,9 @@
     
     <meta name="author" content="zhong.zhou">
     
-    <meta name="description" content="我们深谙信息交流的价值，那网络中进程之间如何通信，如我们每天打开浏览器浏览网页时，浏览器的进程怎么与web服务器通信的？当你用QQ聊天时，QQ进程怎么与服务器或你好友所在的QQ进程通信？这些都得靠socket？那什么是socket？socket的类型有哪些？还有socket的基本函数，这些都是本文想">
+    <meta name="description" content="引言网络中进程之间如何通信，如我们每天打开浏览器浏览网页时，浏览器的进程怎么与web服务器通信的？当你用QQ聊天时，QQ进程怎么与服务器或你好友所在的QQ进程通信？这些都得靠socket？那什么是socket？socket的类型有哪些？还有socket的基本函数有哪些？
+
+网络进程如何通信本地的进程">
     
     
     
@@ -67,7 +69,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/07/Socket通信原理与实践/" title="Socket通信原理与实践" itemprop="url">Socket通信原理与实践</a>
+      <a href="/2015/03/07/Socket通信模式与行为/" title="Socket通信原理与实践" itemprop="url">Socket通信原理与实践</a>
   </h1>
   <p class="article-author">By
     
@@ -75,7 +77,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-03-07T06:14:03.000Z" itemprop="datePublished">2015-03-07</time>
-    更新日期:<time datetime="2015-04-28T09:36:58.000Z" itemprop="dateModified">2015-04-28</time>
+    更新日期:<time datetime="2018-07-28T13:16:15.000Z" itemprop="dateModified">2018-07-28</time>
     
   </p>
 </header>
@@ -84,51 +86,61 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络进程如何通信"><span class="toc-number">2.</span> <span class="toc-text">网络进程如何通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是Socket"><span class="toc-number">3.</span> <span class="toc-text">什么是Socket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socket的基本操作"><span class="toc-number">4.</span> <span class="toc-text">socket的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#socket-函数"><span class="toc-number">4.1.</span> <span class="toc-text">socket()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bind-函数"><span class="toc-number">4.2.</span> <span class="toc-text">bind()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listen-、connect-函数"><span class="toc-number">4.3.</span> <span class="toc-text">listen()、connect()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#accept-函数"><span class="toc-number">4.4.</span> <span class="toc-text">accept()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-、write-等函数"><span class="toc-number">4.5.</span> <span class="toc-text">read()、write()等函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#close-函数"><span class="toc-number">4.6.</span> <span class="toc-text">close()函数</span></a></li></ol></li></ol>
 		</div>
 		
-		<p>我们深谙信息交流的价值，那网络中进程之间如何通信，如我们每天打开浏览器浏览网页时，浏览器的进程怎么与web服务器通信的？当你用QQ聊天时，QQ进程怎么与服务器或你好友所在的QQ进程通信？这些都得靠socket？那什么是socket？socket的类型有哪些？还有socket的基本函数，这些都是本文想介绍的。本文的主要内容如下：</p>
-<p>  1 网络中进程之间如何通信？<br>  2 Socket是什么？<br>  3 socket的基本操作<br>      3.1 socket()函数<br>      3.2 bind()函数<br>      3.3 listen()、connect()函数<br>      3.4accept()函数<br>      3.5read()、write()函数等<br>      3.6close()函数<br>  4 一个Socket_UDP例子</p>
-<p>#1 网络中进程之间如何通信？<br>本地的进程间通信（IPC）有很多种方式，但可以总结为下面4类：</p>
-<p>  消息传递（管道、FIFO、消息队列）<br>  同步（互斥量、条件变量、读写锁、文件读和记录锁、信号量）<br>  共享内存（匿名的和具名的）<br>  远程过程调用（Solaris门和Sun RPC）</p>
-<p>但这些都不是本文的主题！我们要讨论的是网络中进程之间如何通信？首要解决的问题是如何唯一标识一个进程，否则通信无从谈起！在本地可以通过进程PID来唯一标识一个进程，但是在网络中这是行不通的。其实TCP/IP协议族已经帮我们解决了这个问题，网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序（进程）。这样利用三元组（ip地址，协议，端口）就可以标识网络的进程了，网络中的进程通信就可以利用这个标志与其它进程进行交互。</p>
-<p>使用TCP/IP协议的应用程序通常采用应用编程接口：UNIX  BSD的套接字（socket）和UNIX System V的TLI（已经被淘汰），来实现网络进程之间的通信。<strong>就目前而言，几乎所有的应用程序都是采用socket，而现在又是网络时代，网络中进程通信是无处不在，这就是我为什么说“一切皆socket”。</strong></p>
-<p>#2 什么是Socket？<br>上面我们已经知道网络中的进程是通过socket来通信的，那什么是socket呢？socket起源于Unix，而Unix/Linux基本哲学之一就是“一切皆文件”，都可以用“打开open –&gt; 读写write/read –&gt; 关闭close”模式来操作。我的理解就是Socket就是该模式的一个实现，socket即是一种特殊的文件，一些socket函数就是对其进行的操作（读写IO、打开、关闭），这些函数我们在后面进行介绍。<br>Socket是tcp\ip网络协议接口。内部定义了许多的函数和例程。可以看成是网络通信的一个端点。在网络通信中需要两个主机或两个进程。通过网络传递数据，程序在网络对话的每一端需要一个socket。<br><strong>Tcp/IP传输层使用协议端口将数据传送给一个主机的特定应用程序，协议端口是一个应用程序的进程地址。传输层模块的网络软件模块要与另一个程序通信，它将使用协议端口，socket是运行在传输层的api，使用socket建立连接发送数据要指定一个端口给它。</strong></p>
-<p>#3 socket的基本操作<br>既然socket是“open—write/read—close”模式的一种实现，那么socket就提供了这些操作对应的函数接口。下面以TCP为例，介绍几个基本的socket接口函数。</p>
-<p>##3.1 socket()函数<br>int socket(int domain, int type, int protocol);<br>socket函数对应于普通文件的打开操作。普通文件的打开操作返回一个文件描述字，而socket()用于创建一个socket描述符（socket descriptor），它唯一标识一个socket。这个socket描述字跟文件描述字一样，后续的操作都有用到它，把它作为参数，通过它来进行一些读写操作。<br>正如可以给fopen的传入不同参数值，以打开不同的文件。创建socket的时候，也可以指定不同的参数创建不同的socket描述符，socket函数的三个参数分别为：</p>
+		<hr>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>网络中进程之间如何通信，如我们每天打开浏览器浏览网页时，浏览器的进程怎么与web服务器通信的？当你用QQ聊天时，QQ进程怎么与服务器或你好友所在的QQ进程通信？这些都得靠socket？那什么是socket？socket的类型有哪些？还有socket的基本函数有哪些？</p>
+<hr>
+<h2 id="网络进程如何通信"><a href="#网络进程如何通信" class="headerlink" title="网络进程如何通信"></a>网络进程如何通信</h2><p>本地的进程间通信（IPC）有很多种方式，可以总结为：</p>
+<blockquote>
+<p>1）消息传递（管道、FIFO、消息队列）<br>2）同步（互斥量、条件变量、读写锁、文件读和记录锁、信号量）<br>3）共享内存（匿名的和具名的）<br>4）远程过程调用（Solaris门和Sun RPC）</p>
+</blockquote>
+<p>本文要讨论的是网络中进程之间如何通信？首要解决的问题是如何唯一标识一个进程，否则通信无从谈起！在本地可以通过进程PID来唯一标识一个进程，但是在网络中这是行不通的。其实TCP/IP协议族已经帮我们解决了这个问题，网络层的“ip地址”可以唯一标识网络中的主机，而传输层的“协议+端口”可以唯一标识主机中的应用程序（进程）。这样利用三元组（ip地址，协议，端口）就可以标识网络的进程了，网络中的进程通信就可以利用这个标志与其它进程进行交互。</p>
+<p>TCP/IP协议的应用程序通常采用应用编程接口：UNIX  BSD的套接字（socket）和UNIX System V的TLI（已经被淘汰），实现网络进程之间的通信。</p>
+<blockquote>
+<p>目前，几乎所有的应用程序都是采用socket，而现在又是网络时代，网络中进程通信是无处不在，可以说“一切皆socket”。</p>
+</blockquote>
+<hr>
+<h2 id="什么是Socket"><a href="#什么是Socket" class="headerlink" title="什么是Socket"></a>什么是Socket</h2><p>socket起源于Unix，而Unix/Linux基本哲学之一就是“一切皆文件”，都可以用“打开open –&gt; 读写write/read –&gt; 关闭close”模式来操作。<br>Socket就是该模式的一个实现，socket即是一种特殊的文件，socket函数就是对其进行的操作（读写IO、打开、关闭），这些函数会在后面进行介绍。<br>Socket是tcp\ip网络协议接口。内部定义了许多的函数和例程。可以看成是网络通信的一个端点。在网络通信中需要两个主机或两个进程。通过网络传递数据，程序在网络对话的每一端需要一个socket。<br>tcp/ip传输层使用协议端口将数据传送给一个主机的特定应用程序，协议端口是一个应用程序的进程地址。传输层模块的网络软件模块要与另一个程序通信，它将使用协议端口，socket是运行在传输层的api，使用socket建立连接发送数据要指定一个端口给它。</p>
+<hr>
+<h2 id="socket的基本操作"><a href="#socket的基本操作" class="headerlink" title="socket的基本操作"></a>socket的基本操作</h2><p>既然socket是“open—write/read—close”模式的一种实现，那么socket就提供了这些操作对应的函数接口。下面以TCP为例，介绍几个基本的socket接口函数。</p>
+<hr>
+<h3 id="socket-函数"><a href="#socket-函数" class="headerlink" title="socket()函数"></a>socket()函数</h3><p>int socket(int domain, int type, int protocol);<br>socket函数对应于普通文件的打开操作。普通文件的打开操作返回一个文件描述字，而socket()用于创建一个socket描述符（socket descriptor），它唯一标识一个socket。这个socket描述字跟文件描述字一样，后续的操作都有用到它，把它作为参数，通过它来进行一些读写操作。<br>正如可以给fopen的传入不同参数值，以打开不同的文件。创建socket的时候，也可以指定不同的参数创建不同的socket描述符，socket函数的三个参数分别为：</p>
 <ul>
 <li>domain：即协议域，又称为协议族（family）。常用的协议族有，AF_INET、AF_INET6、AF_LOCAL（或称AF_UNIX，Unix域socket）、AF_ROUTE等等。协议族决定了socket的地址类型，在通信中必须采用对应的地址，如AF_INET决定了要用ipv4地址（32位的）与端口号（16位的）的组合、AF_UNIX决定了要用一个绝对路径名作为地址。</li>
 <li>type：指定socket类型。常用的socket类型有，SOCK_STREAM、SOCK_DGRAM、SOCK_RAW、SOCK_PACKET、SOCK_SEQPACKET等等（socket的类型有哪些？）。</li>
 <li>protocol：故名思意，就是指定协议。常用的协议有，IPPROTO_TCP、IPPTOTO_UDP、IPPROTO_SCTP、IPPROTO_TIPC等，它们分别对应TCP传输协议、UDP传输协议、STCP传输协议、TIPC传输协议（这个协议我将会单独开篇讨论！）。<br><strong>注意：并不是上面的type和protocol可以随意组合的，如SOCK_STREAM不可以跟IPPROTO_UDP组合。当protocol为0时，会自动选择type类型对应的默认协议。</strong></li>
 </ul>
 <p>当我们调用socket创建一个socket时，返回的socket描述字存在于协议族（address family，AF_XXX）空间中，但没有一个具体的地址。<br><strong>如果想要给它赋值一个地址，就必须调用bind()函数，否则当调用connect()、listen()时系统会自动随机分配一个端口。</strong></p>
-<p>##3.2 bind()函数<br>正如上面所说bind()函数把一个地址族中的特定地址赋给socket。例如对应AF_INET、AF_INET6就是把一个ipv4或ipv6地址和端口号组合赋给socket。</p>
+<hr>
+<h3 id="bind-函数"><a href="#bind-函数" class="headerlink" title="bind()函数"></a>bind()函数</h3><p>正如上面所说bind()函数把一个地址族中的特定地址赋给socket。例如对应AF_INET、AF_INET6就是把一个ipv4或ipv6地址和端口号组合赋给socket。</p>
 <p>int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);<br>函数的三个参数分别为：</p>
 <ul>
 <li>sockfd：即socket描述字，它是通过socket()函数创建了，唯一标识一个socket。bind()函数就是将给这个描述字绑定一个名字。</li>
 <li>addr：const struct sockaddr *指针，指向要绑定给sockfd的协议地址。这个地址结构根据地址创建socket时的地址协议族的不同而不同。</li>
 </ul>
-<p>##3.3 listen()、connect()函数<br>如果作为一个服务器，在调用socket()、bind()之后就会调用listen()来监听这个socket，如果客户端这时调用connect()发出连接请求，服务器端就会接收到这个请求。</p>
+<hr>
+<h3 id="listen-、connect-函数"><a href="#listen-、connect-函数" class="headerlink" title="listen()、connect()函数"></a>listen()、connect()函数</h3><p>如果作为一个服务器，在调用socket()、bind()之后就会调用listen()来监听这个socket，如果客户端这时调用connect()发出连接请求，服务器端就会接收到这个请求。</p>
 <p>  int listen(int sockfd, int backlog);<br>  int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);</p>
 <p>listen函数的第一个参数即为要监听的socket描述字，第二个参数为相应socket可以排队的最大连接个数。<strong>socket()函数创建的socket默认是一个主动类型的，listen函数将socket变为被动类型的，等待客户的连接请求。</strong></p>
 <p>connect函数的第一个参数即为客户端的socket描述字，第二参数为服务器的socket地址，第三个参数为socket地址的长度。客户端通过调用connect函数来建立与TCP服务器的连接。</p>
-<p>##3.4 accept()函数<br>TCP服务器端依次调用socket()、bind()、listen()之后，就会监听指定的socket地址了。TCP客户端依次调用socket()、connect()之后就向TCP服务器发送了一个连接请求。TCP服务器监听到这个请求之后，就会调用accept()函数取接收请求，这样连接就建立好了。之后就可以开始网络I/O操作了，即类同于普通文件的读写I/O操作。</p>
+<hr>
+<h3 id="accept-函数"><a href="#accept-函数" class="headerlink" title="accept()函数"></a>accept()函数</h3><p>TCP服务器端依次调用socket()、bind()、listen()之后，就会监听指定的socket地址了。TCP客户端依次调用socket()、connect()之后就向TCP服务器发送了一个连接请求。TCP服务器监听到这个请求之后，就会调用accept()函数取接收请求，这样连接就建立好了。之后就可以开始网络I/O操作了，即类同于普通文件的读写I/O操作。</p>
 <p>int accept(int sockfd, struct sockaddr <em>addr, socklen_t </em>addrlen);<br>accept函数的第一个参数为服务器的socket描述字，第二个参数为指向struct sockaddr *的指针，用于返回客户端的协议地址，第三个参数为协议地址的长度。如果accpet成功，那么其返回值是由内核自动生成的一个全新的描述字，代表与返回客户的TCP连接。</p>
 <p><strong>注意：accept的第一个参数为服务器的socket描述字，是服务器开始调用socket()函数生成的，称为监听socket描述字；而accept函数返回的是已连接的socket描述字。一个服务器通常通常仅仅只创建一个监听socket描述字，它在该服务器的生命周期内一直存在。内核为每个由服务器进程接受的客户连接创建了一个已连接socket描述字，当服务器完成了对某个客户的服务，相应的已连接socket描述字就被关闭。</strong></p>
-<p>##3.5 read()、write()等函数</p>
-<p>万事具备只欠东风，至此服务器与客户已经建立好连接了。可以调用网络I/O进行读写操作了，即实现了网咯中不同进程之间的通信！网络I/O操作有下面几组：</p>
+<hr>
+<h3 id="read-、write-等函数"><a href="#read-、write-等函数" class="headerlink" title="read()、write()等函数"></a>read()、write()等函数</h3><p>万事具备只欠东风，至此服务器与客户已经建立好连接了。可以调用网络I/O进行读写操作了，即实现了网咯中不同进程之间的通信！网络I/O操作有下面几组：</p>
 <p>  read()/write()<br>  recv()/send()<br>  readv()/writev()<br>  recvmsg()/sendmsg()<br>  recvfrom()/sendto()</p>
 <p>我推荐使用recvmsg()/sendmsg()函数，这两个函数是最通用的I/O函数，实际上可以把上面的其它函数都替换成这两个函数。它们的声明如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">ssize\_t read(int fd, void *buf, size_t count);</span><br><span class="line">ssize\_t write(int fd, const void *buf, size_t count);</span><br><span class="line"></span><br><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line"></span><br><span class="line">ssize_t send(int sockfd, const void *buf, size_t len, int flags);</span><br><span class="line">ssize_t recv(int sockfd, void *buf, size_t len, int flags);</span><br><span class="line"></span><br><span class="line">ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,</span><br><span class="line">                    const struct sockaddr *dest_addr, socklen_t addrlen);</span><br><span class="line">ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,</span><br><span class="line">                      struct sockaddr *src_addr, socklen_t *addrlen);</span><br><span class="line"></span><br><span class="line">ssize_t sendmsg(int sockfd, const struct msghdr *msg, int flags);</span><br><span class="line">ssize_t recvmsg(int sockfd, struct msghdr *msg, int flags);</span><br></pre></td></tr></table></figure>
-<p>read函数是负责从fd中读取内容.当读成功时，read返回实际所读的字节数，如果返回的值是0表示已经读到文件的结束了，小于0表示出现了错误。如果错误为EINTR说明读是由中断引起的，如果是ECONNREST表示网络连接出了问题。</p>
+<p>read函数是负责从fd中读取内容。当读成功时，read返回实际所读的字节数，如果返回的值是0表示已经读到文件的结束了，小于0表示出现了错误。如果错误为EINTR说明读是由中断引起的，如果是ECONNREST表示网络连接出了问题。</p>
 <p>write函数将buf中的nbytes字节内容写入文件描述符fd.成功时返回写的字节数。失败时返回-1，并设置errno变量。 在网络程序中，当我们向套接字文件描述符写时有俩种可能。<br>1)write的返回值大于0，表示写了部分或者是全部的数据。<br>2)返回的值小于0，此时出现了错误。我们要根据错误类型来处理。如果错误为EINTR表示在写的时候出现了中断错误。如果为EPIPE表示网络连接出现了问题(对方已经关闭了连接)。</p>
 <p>其它的我就不一一介绍,这几对I/O函数了，具体参见man文档或者baidu、Google，下面的例子中将使用到send/recv。</p>
-<p>##3.6 close()函数<br>在服务器与客户端建立连接之后，会进行一些读写操作，完成了读写操作就要关闭相应的socket描述字，好比操作完打开的文件要调用fclose关闭打开的文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int close(int fd);</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="close-函数"><a href="#close-函数" class="headerlink" title="close()函数"></a>close()函数</h3><p>在服务器与客户端建立连接之后，会进行一些读写操作，完成了读写操作就要关闭相应的socket描述字，好比操作完打开的文件要调用fclose关闭打开的文件。</p>
 <p>close一个TCP socket的缺省行为时把该socket标记为已关闭，然后立即返回到调用进程。该描述字不能再由调用进程使用，也就是说不能再作为read或write的第一个参数。</p>
 <p><strong>注意：close操作只是使相应socket描述字的引用计数-1，只有当引用计数为0的时候，才会触发TCP客户端向服务器发送终止连接请求。</strong></p>
-<p>4 一个Socket_UDP例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using System.Linq;</span><br><span class="line">using System.Text;</span><br><span class="line">using System.Threading.Tasks;</span><br><span class="line">using System.Net;</span><br><span class="line">using System.Net.Sockets;</span><br><span class="line">using System.Threading;</span><br><span class="line">namespace Socket_Application</span><br><span class="line">&#123;</span><br><span class="line">    class Program</span><br><span class="line">    &#123;</span><br><span class="line">        static void Main(string[] args)</span><br><span class="line">        &#123;</span><br><span class="line">            //服务器指定端口和IP给客户端发送触发信号</span><br><span class="line">            IPAddress pc_ip = IPAddress.Parse(&quot;192.168.23.1&quot;);   //PC ip</span><br><span class="line">            IPAddress node_ip = IPAddress.Parse(&quot;192.168.23.4&quot;);   //节点端 ip</span><br><span class="line">            IPEndPoint endPoint = new IPEndPoint(pc_ip, 8090);  //pc端通信的端点</span><br><span class="line">            Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp); //PC端套接字</span><br><span class="line"></span><br><span class="line">            // Creates an IPEndPoint to capture the identity of the sending host.</span><br><span class="line">            IPEndPoint sender = new IPEndPoint(node_ip, 8090);  //节点端通信的端点</span><br><span class="line">            EndPoint senderRemote = (EndPoint)sender;</span><br><span class="line">            s.Bind(endPoint);     //PC端套接字绑定通信端点</span><br><span class="line">            byte[] msg = new Byte[12];   //接受缓冲区</span><br><span class="line">            byte[] triger = Encoding.ASCII.GetBytes(&quot;1&quot;);  //触发信号</span><br><span class="line">            Console.WriteLine(&quot;Waiting to receive datagrams from client...&quot;);</span><br><span class="line">            while (true)</span><br><span class="line">            &#123;</span><br><span class="line">                s.SendTo(triger, senderRemote);   //PC端发送触发信号</span><br><span class="line">                s.ReceiveFrom(msg, ref senderRemote);  //PC端接收数据</span><br><span class="line">                string str = BitConverter.ToString(msg);</span><br><span class="line">                Console.WriteLine(str);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Socket的相关应用：<a href="http://blog.csdn.net/u011608357/article/details/18862853/" target="_blank" rel="external">socket获取本机IP地址方法</a></p>
   
 	</div>
@@ -136,26 +148,39 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Socket通信原理与实践/">Socket通信原理与实践</a>
+  <span></span> <a href="/tags/网络编程/">网络编程</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/网络编程/">网络编程</a>
+  <a class="article-category-link" href="/categories/网络基础/">网络基础</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2015/03/07/Socket通信原理与实践/" data-title="Socket通信原理与实践 | 木心少年" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2015/03/07/Socket通信模式与行为/" data-title="Socket通信原理与实践 | 木心少年" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
 </footer>   	       
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/10/操作系统的基础知识/" title="操作系统基础概念">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  操作系统基础概念</span>
+</a>
+</div>
+
+
+</nav>
+
 	
 <section class="comment">
 	<div class="ds-thread"></div>
@@ -166,7 +191,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络进程如何通信"><span class="toc-number">2.</span> <span class="toc-text">网络进程如何通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是Socket"><span class="toc-number">3.</span> <span class="toc-text">什么是Socket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socket的基本操作"><span class="toc-number">4.</span> <span class="toc-text">socket的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#socket-函数"><span class="toc-number">4.1.</span> <span class="toc-text">socket()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bind-函数"><span class="toc-number">4.2.</span> <span class="toc-text">bind()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listen-、connect-函数"><span class="toc-number">4.3.</span> <span class="toc-text">listen()、connect()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#accept-函数"><span class="toc-number">4.4.</span> <span class="toc-text">accept()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#read-、write-等函数"><span class="toc-number">4.5.</span> <span class="toc-text">read()、write()等函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#close-函数"><span class="toc-number">4.6.</span> <span class="toc-text">close()函数</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
@@ -178,7 +203,21 @@
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/网络编程/" title="网络编程">网络编程<sup>1</sup></a></li>
+			<li><a href="/categories/Android应用/" title="Android应用">Android应用<sup>1</sup></a></li>
+		
+			<li><a href="/categories/web开发/" title="web开发">web开发<sup>3</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>5</sup></a></li>
+		
+			<li><a href="/categories/网络基础/" title="网络基础">网络基础<sup>5</sup></a></li>
+		
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
 		
 		</ul>
 </div>

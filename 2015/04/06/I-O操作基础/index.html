@@ -1,0 +1,391 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>I/O概念基础 | 木心少年</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhong.zhou">
+    
+    <meta name="description" content="引言
+I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
+
+一次完整的I/O操作包括两个阶段：
+
+1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
+
+
+阻塞I/O
+用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/author.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/author.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="木心少年" title="木心少年"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="木心少年">木心少年</a></h1>
+				<h2 class="blog-motto">如果非要去地狱，那就走一趟吧！-丘吉尔</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">简介</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/06/I-O操作基础/" title="I/O概念基础" itemprop="url">I/O概念基础</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-06T01:54:45.000Z" itemprop="datePublished">2015-04-06</time>
+    更新日期:<time datetime="2018-07-28T12:48:44.000Z" itemprop="dateModified">2018-07-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阻塞I-O"><span class="toc-number">2.</span> <span class="toc-text">阻塞I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非阻塞I-O"><span class="toc-number">3.</span> <span class="toc-text">非阻塞I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复用I-O"><span class="toc-number">4.</span> <span class="toc-text">复用I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步信号I-O"><span class="toc-number">5.</span> <span class="toc-text">同步信号I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步I-O"><span class="toc-number">6.</span> <span class="toc-text">异步I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+		</div>
+		
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p>I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O</p>
+</blockquote>
+<p>一次完整的I/O操作包括两个阶段：</p>
+<blockquote>
+<p>1）数据准备（内核准备数据供I/O操作使用）<br>2）数据拷贝（将内核中的数据拷贝到用户进程）</p>
+</blockquote>
+<hr>
+<h2 id="阻塞I-O"><a href="#阻塞I-O" class="headerlink" title="阻塞I/O"></a>阻塞I/O</h2><blockquote>
+<p>用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户进程中。</p>
+</blockquote>
+<hr>
+<h2 id="非阻塞I-O"><a href="#非阻塞I-O" class="headerlink" title="非阻塞I/O"></a>非阻塞I/O</h2><blockquote>
+<p>进程发出I/O请求后，CPU会返回一个ERROR的信息，在CPU准备数据的时候，进程不会阻塞，但进程会去不断轮询CPU是否已经准备好数据，等到CPU准备好时，在进程将数据从内核拷贝到进程中的过程中，进程是阻塞。</p>
+</blockquote>
+<hr>
+<h2 id="复用I-O"><a href="#复用I-O" class="headerlink" title="复用I/O"></a>复用I/O</h2><blockquote>
+<p>和非阻塞I/O的原理差不多，不过通过I/O复用的形式，可以同时支持多个连接。（select/epoll）</p>
+</blockquote>
+<hr>
+<h2 id="同步信号I-O"><a href="#同步信号I-O" class="headerlink" title="同步信号I/O"></a>同步信号I/O</h2><blockquote>
+<p>内核和进程通过signal通信，进程不用去不断查询CPU是否准备好数据，CPU准备好数据后会通过signal来通知进程，然后进程再将数据从内核拷贝用户进程。</p>
+</blockquote>
+<hr>
+<h2 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a>异步I/O</h2><blockquote>
+<p>进程只要向CPU发送I/O请求，数据准备和数据拷贝都有CPU完成，等CPU把事情都做完了才通知进程。</p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>前四者均存在进程阻塞，都属于同步I/O；只有异步I/O下，进程完全没有阻塞。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/网络基础/">网络基础</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2015/04/06/I-O操作基础/" data-title="I/O概念基础 | 木心少年" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/08/16/SpringMVC学习篇（一）/" title="SpringMVC学习篇（一）">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  SpringMVC学习篇（一）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/05/事件与委托/"  title="事件与委托">
+ <strong>NEXT:</strong><br/> 
+ <span>事件与委托
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阻塞I-O"><span class="toc-number">2.</span> <span class="toc-text">阻塞I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非阻塞I-O"><span class="toc-number">3.</span> <span class="toc-text">非阻塞I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复用I-O"><span class="toc-number">4.</span> <span class="toc-text">复用I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步信号I-O"><span class="toc-number">5.</span> <span class="toc-text">同步信号I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步I-O"><span class="toc-number">6.</span> <span class="toc-text">异步I/O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android应用/" title="Android应用">Android应用<sup>1</sup></a></li>
+		
+			<li><a href="/categories/web开发/" title="web开发">web开发<sup>3</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>1</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>5</sup></a></li>
+		
+			<li><a href="/categories/网络基础/" title="网络基础">网络基础<sup>5</sup></a></li>
+		
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://wsgzao.github.io/" target="_blank" title="wsgzao">wsgzao's blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m zhong.zhou. This is my blog on Gitbub. <br/>
+			no more no better</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5607185050" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/fblq" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2018 
+		
+		<a href="http://yoursite.com" target="_blank" title="zhong.zhou">zhong.zhou</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"fblq"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="���ض���"><img src="/img/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+  </body>
+</html>
