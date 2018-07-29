@@ -1,0 +1,422 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>一致性Hash算法 | 木心少年</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhong.zhou">
+    
+    <meta name="description" content="引言consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。
+
+应用场景比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/author.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/author.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="木心少年" title="木心少年"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="木心少年">木心少年</a></h1>
+				<h2 class="blog-motto">如果非要去地狱，那就走一趟吧！-丘吉尔</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">简介</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/03/一致性Hash算法/" title="一致性Hash算法" itemprop="url">一致性Hash算法</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="zhong.zhou">zhong.zhou</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-03T12:17:43.000Z" itemprop="datePublished">2015-04-03</time>
+    更新日期:<time datetime="2018-07-29T03:58:42.000Z" itemprop="dateModified">2018-07-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hash算法和单调性"><span class="toc-number">3.</span> <span class="toc-text">hash算法和单调性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consistent-hashing算法的原理"><span class="toc-number">4.</span> <span class="toc-text">consistent hashing算法的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环形hash空间"><span class="toc-number">4.1.</span> <span class="toc-text">环形hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把对象映射到hash空间"><span class="toc-number">4.2.</span> <span class="toc-text">把对象映射到hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把cache映射到hash空间"><span class="toc-number">4.3.</span> <span class="toc-text">把cache映射到hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把object映射到cache"><span class="toc-number">4.4.</span> <span class="toc-text">把object映射到cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#考察cache的变动"><span class="toc-number">4.5.</span> <span class="toc-text">考察cache的变动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#移除cache"><span class="toc-number">4.5.1.</span> <span class="toc-text">移除cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加cache"><span class="toc-number">4.5.2.</span> <span class="toc-text">添加cache</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟节点"><span class="toc-number">5.</span> <span class="toc-text">虚拟节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">6.</span> <span class="toc-text">小结</span></a></li></ol>
+		</div>
+		
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。</p>
+<hr>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：</p>
+<blockquote>
+<p><strong>hash(object)%N</strong></p>
+</blockquote>
+<p>一切都运行正常，再考虑如下的两种情况；</p>
+<blockquote>
+<ol>
+<li>一个cache m down掉了（在实际应用中必须要考虑这种情况），这样所有映射到cache m的对象都会失效，怎么办，需要把cache m从cache中移除，这时候cache是N-1台，映射公式变成了<strong>hash(object)%(N-1)</strong>；</li>
+<li>由于访问加重，需要添加cache，这时候cache是N+1 台，映射公式变成了<strong>hash(object)%(N+1)</strong>；</li>
+</ol>
+</blockquote>
+<p>1和2意味着什么？这意味着突然之间几乎所有的 cache 都失效了。对于服务器而言，这是一场灾难，洪水般的访问都会直接冲向后台服务器；<br>再来考虑第三个问题，由于硬件能力越来越强，你可能想让后面添加的节点多做点活，显然上面的 hash 算法也做不到。<br>有什么方法可以改变这个状况呢，这就是consistent hashing…</p>
+<hr>
+<h2 id="hash算法和单调性"><a href="#hash算法和单调性" class="headerlink" title="hash算法和单调性"></a>hash算法和单调性</h2><p>Hash算法的一个衡量指标是单调性（Monotonicity），定义如下：</p>
+<blockquote>
+<p>单调性是指如果已经有一些object通过哈希分派到了相应的cache中，又有新的cache加入到系统中。哈希的结果应能够保证原有已分配的object可以被映射到新的cache中去，而不会被映射到旧的cache集合中的其他cache区。</p>
+</blockquote>
+<p>容易看到，上面的简单hash算法<strong>hash(object)%N</strong>难以满足单调性要求。</p>
+<hr>
+<h2 id="consistent-hashing算法的原理"><a href="#consistent-hashing算法的原理" class="headerlink" title="consistent hashing算法的原理"></a>consistent hashing算法的原理</h2><p>consistent hashing是一种hash算法，简单的说，在移除/添加一个cache时，它能够尽可能小的改变已存在key的映射关系，尽可能的满足单调性的要求。<br>下面就来按照5个步骤简单讲讲consistent hashing算法的基本原理。</p>
+<hr>
+<h3 id="环形hash空间"><a href="#环形hash空间" class="headerlink" title="环形hash空间"></a>环形hash空间</h3><p>考虑通常的hash算法都是将value映射到一个32位的key值，也即是 <strong>0~2^32-1</strong> 次方的数值空间；我们可以将这个空间想象成一个首（0）尾（2^32-1）相接的圆环，如下图所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/circle.JPG" alt="环形hash空间"></p>
+<hr>
+<h3 id="把对象映射到hash空间"><a href="#把对象映射到hash空间" class="headerlink" title="把对象映射到hash空间"></a>把对象映射到hash空间</h3><p>接下来考虑4个对象object1~object4，通过hash函数计算出的hash值key在环上的分布如下图所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(object1) = key1;</span><br><span class="line">… …</span><br><span class="line">hash(object4) = key4;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/object.JPG" alt="图2 4个对象的key值分布"></p>
+<hr>
+<h3 id="把cache映射到hash空间"><a href="#把cache映射到hash空间" class="headerlink" title="把cache映射到hash空间"></a>把cache映射到hash空间</h3><p>Consistent hashing的基本思想就是将object和cache都映射到同一个hash数值空间中，并且使用相同的hash算法。<br>假设当前有A，B，C共3台cache，那么其映射结果将如下图所示，他们在hash空间中，以对应的hash值排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(cache A) = key A;</span><br><span class="line">… …</span><br><span class="line">hash(cache C) = key C;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/cache.JPG" alt="图3 cache和对象的key值分布"></p>
+<p>说到这里，顺便提一下cache的hash计算，一般的方法可以使用cache机器的IP地址或者机器名作为hash输入。</p>
+<hr>
+<h3 id="把object映射到cache"><a href="#把object映射到cache" class="headerlink" title="把object映射到cache"></a>把object映射到cache</h3><p>现在cache和object都已经通过同一个hash算法映射到hash数值空间中了，接下来要考虑的就是如何将object映射到cache上面了。<br>在这个环形空间中，如果沿着顺时针方向从object的key值出发，直到遇见一个cache，那么就将该对象存储在这个cache上，因为object和cache的hash值是固定的，因此这个cache必然是唯一、确定的。<br>继续上面的例子（参见图3），根据上面的方法，对象object1将被存储到cache A上；object2和object3被存储到cache C；object4被存储到cache B；</p>
+<hr>
+<h3 id="考察cache的变动"><a href="#考察cache的变动" class="headerlink" title="考察cache的变动"></a>考察cache的变动</h3><p>前面讲过，通过hash然后求余的方法带来的最大问题就在于不能满足单调性，当cache有所变动时，cache会失效，进而对后台服务器造成巨大的冲击，现在就来分析分析consistent hashing算法。</p>
+<hr>
+<h4 id="移除cache"><a href="#移除cache" class="headerlink" title="移除cache"></a>移除cache</h4><p>考虑假设cache B挂掉了，根据上面讲到的映射方法，这时受影响的将仅是那些沿cache B逆时针遍历直到下一个cache（cache C）之间的对象，也即是本来映射到cache B上的那些对象。<br>因此这里仅需要变动对象object4，将其重新映射到cache C上即可，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/remove.JPG" alt="图4 Cache B 被移除后的cache映射"></p>
+<hr>
+<h4 id="添加cache"><a href="#添加cache" class="headerlink" title="添加cache"></a>添加cache</h4><p>再考虑添加一台新的cache D的情况，假设在这个环形hash空间中，cache D被映射在对象object2和object3之间。这时受影响的将仅是那些沿cache D逆时针遍历直到下一个cache（ cache B ）之间的对象（它们是也本来映射到cache C上对象的一部分），将这些对象重新映射到cache D上即可。<br>因此这里仅需要变动对象object2，将其重新映射到cache D上，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/add.JPG" alt="图5 添加 cache D 后的映射关系"></p>
+<hr>
+<h2 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h2><p>考量Hash算法的另一个指标是平衡性 (Balance) ，定义如下：</p>
+<blockquote>
+<p>平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。</p>
+</blockquote>
+<p>hash算法并不是保证绝对的平衡，如果<strong>cache少</strong>的话，对象并不能被均匀的映射到cache上，比如在上面的例子中，仅部署cache A和 cache C的情况下，在4个对象中，cache A仅存储了object1，而cache C则存储了object2、object3和object4；分布是很不均衡的。<br>为了解决这种情况，consistent hashing引入了“虚拟节点”的概念，它可以如下定义：</p>
+<blockquote>
+<p>“虚拟节点”（virtual node）是实际节点在 hash 空间的复制品（replication），一个实际节点对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在hash空间中以hash值排列。</p>
+</blockquote>
+<p>仍以仅部署cache A和cache C的情况为例，在图4中我们已经看到，cache分布并不均匀。现在我们引入虚拟节点，并设置“复制个数”为2，这就意味着一共会存在4个“虚拟节点”，cache A1、cache A2代表了cache A；cache C1、cache C2代表了cache C。假设一种比较理想的情况，如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/virtual.JPG" alt="图6 引入“虚拟节点”后的映射关系"></p>
+<p>此时，对象到“虚拟节点”的映射关系为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">objec1-&gt;cache A2 ； objec2-&gt;cache A1 ；</span><br><span class="line">objec3-&gt;cache C1 ； objec4-&gt;cache C2 ；</span><br></pre></td></tr></table></figure></p>
+<p>因此对象object1和object2都被映射到了cache A上，而object3和object4映射到了cache C上,平衡性有了很大提高。</p>
+<p>引入“虚拟节点”后，映射关系就从{object-&gt;cache}转换到了{object-&gt;虚拟节点-&gt;cache}，查询物体所在cache时的映射关系变成了如下所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/map.JPG" alt="图7 查询对象所在 cache"></p>
+<p>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设cache A的IP地址为202.168.14.241。<br>引入“虚拟节点”前，计算cache A的hash值：</p>
+<blockquote>
+<p><strong>Hash(“202.168.14.241”);</strong></p>
+</blockquote>
+<p>引入“虚拟节点”后，计算“虚拟节”点cache A1和cache A2的hash值：</p>
+<blockquote>
+<p><strong>Hash(“202.168.14.241#1”);</strong>  // cache A1<br><strong>Hash(“202.168.14.241#2”);</strong>  // cache A2</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以上是Consistent hashing的基本原理,仅供参考。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/服务治理/">服务治理</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/工程应用/">工程应用</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2015/04/03/一致性Hash算法/" data-title="一致性Hash算法 | 木心少年" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/05/事件与委托/" title="事件与委托">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  事件与委托</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/01/指针运算/"  title="指针运算">
+ <strong>NEXT:</strong><br/> 
+ <span>指针运算
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hash算法和单调性"><span class="toc-number">3.</span> <span class="toc-text">hash算法和单调性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consistent-hashing算法的原理"><span class="toc-number">4.</span> <span class="toc-text">consistent hashing算法的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环形hash空间"><span class="toc-number">4.1.</span> <span class="toc-text">环形hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把对象映射到hash空间"><span class="toc-number">4.2.</span> <span class="toc-text">把对象映射到hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把cache映射到hash空间"><span class="toc-number">4.3.</span> <span class="toc-text">把cache映射到hash空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把object映射到cache"><span class="toc-number">4.4.</span> <span class="toc-text">把object映射到cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#考察cache的变动"><span class="toc-number">4.5.</span> <span class="toc-text">考察cache的变动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#移除cache"><span class="toc-number">4.5.1.</span> <span class="toc-text">移除cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加cache"><span class="toc-number">4.5.2.</span> <span class="toc-text">添加cache</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟节点"><span class="toc-number">5.</span> <span class="toc-text">虚拟节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">6.</span> <span class="toc-text">小结</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android应用/" title="Android应用">Android应用<sup>1</sup></a></li>
+		
+			<li><a href="/categories/web开发/" title="web开发">web开发<sup>3</sup></a></li>
+		
+			<li><a href="/categories/工程应用/" title="工程应用">工程应用<sup>1</sup></a></li>
+		
+			<li><a href="/categories/开发工具/" title="开发工具">开发工具<sup>2</sup></a></li>
+		
+			<li><a href="/categories/操作系统/" title="操作系统">操作系统<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>5</sup></a></li>
+		
+			<li><a href="/categories/缓存应用/" title="缓存应用">缓存应用<sup>1</sup></a></li>
+		
+			<li><a href="/categories/网络基础/" title="网络基础">网络基础<sup>5</sup></a></li>
+		
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+		
+			<li><a href="/categories/面试题/" title="面试题">面试题<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://wsgzao.github.io/" target="_blank" title="wsgzao">wsgzao's blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m zhong.zhou. This is my blog on Gitbub. <br/>
+			no more no better</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5607185050" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/fblq" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2018 
+		
+		<a href="http://yoursite.com" target="_blank" title="zhong.zhou">zhong.zhou</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"fblq"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+<div id="totop" style="position:fixed;bottom:150px;right:50px;cursor: pointer;">
+<a title="���ض���"><img src="/img/scrollup.png"/></a>
+</div>
+<script src="/js/totop.js"></script>
+
+  </body>
+</html>
