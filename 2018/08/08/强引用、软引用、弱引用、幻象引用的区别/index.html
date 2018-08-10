@@ -8,16 +8,25 @@
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>强引用、软引用、弱引用、幻象引用的区别 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="preparement meets opportunity">
+  <meta name="description" content="引言java中除了基础类型，其他的都是引用类型，掌握好引用类型，对理解对象生命周期与GC回收机制很有帮助。
+概念介绍
+强引用：代码中很常见，被new出来的对象是强引用，只要强应用没解除，JVM分配新的内存空间不足时，即使会发生OOM，也不会回收强引用对象；解除强应用的方法有赋值为null。
+软引用：关键字softreference修饰的对象，当JVM分配新内存空间不足时，会回收软引用对象；软引用对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="强引用、软引用、弱引用、幻象引用的区别">
 <meta property="og:url" content="https://github.com/fblq/2018/08/08/强引用、软引用、弱引用、幻象引用的区别/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="preparement meets opportunity">
-<meta property="og:updated_time" content="2018-08-08T00:25:28.000Z">
+<meta property="og:description" content="引言java中除了基础类型，其他的都是引用类型，掌握好引用类型，对理解对象生命周期与GC回收机制很有帮助。
+概念介绍
+强引用：代码中很常见，被new出来的对象是强引用，只要强应用没解除，JVM分配新的内存空间不足时，即使会发生OOM，也不会回收强引用对象；解除强应用的方法有赋值为null。
+软引用：关键字softreference修饰的对象，当JVM分配新内存空间不足时，会回收软引用对象；软引用对">
+<meta property="og:updated_time" content="2018-08-10T16:43:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强引用、软引用、弱引用、幻象引用的区别">
-<meta name="twitter:description" content="preparement meets opportunity">
+<meta name="twitter:description" content="引言java中除了基础类型，其他的都是引用类型，掌握好引用类型，对理解对象生命周期与GC回收机制很有帮助。
+概念介绍
+强引用：代码中很常见，被new出来的对象是强引用，只要强应用没解除，JVM分配新的内存空间不足时，即使会发生OOM，也不会回收强引用对象；解除强应用的方法有赋值为null。
+软引用：关键字softreference修饰的对象，当JVM分配新内存空间不足时，会回收软引用对象；软引用对">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -155,7 +164,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>java中除了基础类型，其他的都是引用类型，掌握好引用类型，对理解对象生命周期与GC回收机制很有帮助。</p>
+<h2 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h2><ul>
+<li>强引用：代码中很常见，被new出来的对象是强引用，只要强应用没解除，JVM分配新的内存空间不足时，即使会发生OOM，也不会回收强引用对象；解除强应用的方法有赋值为null。</li>
+<li>软引用：关键字softreference修饰的对象，当JVM分配新内存空间不足时，会回收软引用对象；软引用对象在被JVM回收后会存放在引用队列里。</li>
+<li>弱引用：关键字weakreference修饰的对象，若引用对象会在下一次GC时被回收。</li>
+<li>幻象引用：</li>
+</ul>
+<h2 id="应用拓展"><a href="#应用拓展" class="headerlink" title="应用拓展"></a>应用拓展</h2><p>引用队列<br>软应用：内存敏感性缓存</p>
+
       
 
       
@@ -189,7 +206,29 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">对象生命周期</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Java基础//" class="article-tag-list-link color2">Java基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -330,11 +369,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color2">俯瞰SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">俯瞰SpringMVC</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -342,7 +381,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Makefile与Shell</a>
+                <a href="javascript:void(0)" class="js-tag color2">linux epoll</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -350,15 +389,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Makefile与Shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">C/C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">linux epoll</a>
+                <a href="javascript:void(0)" class="js-tag color1">初学理解篇</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">初学理解篇</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">对象生命周期</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -370,15 +417,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">基础概念</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -387,6 +426,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
             
             <div class="clearfix"></div>
