@@ -8,16 +8,22 @@
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>java异常底层实现 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="preparement meets opportunity">
+  <meta name="description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
+捕获异常try、catch、finally代码块编译后的字节码结构图。
+finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java异常底层实现">
 <meta property="og:url" content="https://github.com/fblq/2018/08/11/java异常底层实现/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="preparement meets opportunity">
-<meta property="og:updated_time" content="2018-08-11T10:31:36.000Z">
+<meta property="og:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
+捕获异常try、catch、finally代码块编译后的字节码结构图。
+finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+<meta property="og:updated_time" content="2018-08-11T19:13:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java异常底层实现">
-<meta name="twitter:description" content="preparement meets opportunity">
+<meta name="twitter:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
+捕获异常try、catch、finally代码块编译后的字节码结构图。
+finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -155,7 +161,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h2 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h2><p>通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（<font color="Coral">新建异常的位置，不是throw语句的位置</font>）。</p>
+<h2 id="捕获异常"><a href="#捕获异常" class="headerlink" title="捕获异常"></a>捕获异常</h2><p>try、catch、finally代码块编译后的字节码结构图。</p>
+<p><font color="Coral">finally块会编译成多块字节码，会放在程序中每一个可能的出口。</font><br>在编译生成的字节码中，每个方法附带了一个异常表，表中的每一个条目代表一个异常处理器，有from指针、to指针、targe指针和所捕获的异常类型组成。<br>JVM按照从上到下的顺序（<font color="Coral">同catch块的顺序</font>）遍历异常表中的条目，根据触发异常字节码的索引值是否在监控范围来判断异常是否匹配。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>如何实现finally块必须执行的？</li>
+</ul>
+
       
 
       
@@ -333,11 +345,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -345,11 +357,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">工具</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -357,11 +365,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+                <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
               </li>
              
               <li class="article-tag-list-item">

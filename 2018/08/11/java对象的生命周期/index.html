@@ -8,16 +8,25 @@
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>java对象的生命周期 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="preparement meets opportunity">
+  <meta name="description" content="引言理解java对象的生命周期，包括对象不同的可达性状态和对垃圾收集的影响，有助于正确应用java中的四种引用，对缓存设计、诊断OOM、分析内存泄露很有帮助。
+对象状态对象创建对象初始化强引用状态软引用弱引用finalize幻象引用unreachable
+疑问
+怎么排查幻象引用的堆积问题？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java对象的生命周期">
 <meta property="og:url" content="https://github.com/fblq/2018/08/11/java对象的生命周期/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="preparement meets opportunity">
-<meta property="og:updated_time" content="2018-08-11T10:31:45.000Z">
+<meta property="og:description" content="引言理解java对象的生命周期，包括对象不同的可达性状态和对垃圾收集的影响，有助于正确应用java中的四种引用，对缓存设计、诊断OOM、分析内存泄露很有帮助。
+对象状态对象创建对象初始化强引用状态软引用弱引用finalize幻象引用unreachable
+疑问
+怎么排查幻象引用的堆积问题？">
+<meta property="og:updated_time" content="2018-08-11T18:10:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java对象的生命周期">
-<meta name="twitter:description" content="preparement meets opportunity">
+<meta name="twitter:description" content="引言理解java对象的生命周期，包括对象不同的可达性状态和对垃圾收集的影响，有助于正确应用java中的四种引用，对缓存设计、诊断OOM、分析内存泄露很有帮助。
+对象状态对象创建对象初始化强引用状态软引用弱引用finalize幻象引用unreachable
+疑问
+怎么排查幻象引用的堆积问题？">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -155,7 +164,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>理解java对象的生命周期，包括对象<font color="Coral">不同的可达性状态</font>和对垃圾收集的影响，有助于正确应用java中的四种引用，对缓存设计、诊断OOM、分析内存泄露很有帮助。</p>
+<h2 id="对象状态"><a href="#对象状态" class="headerlink" title="对象状态"></a>对象状态</h2><p>对象创建<br>对象初始化<br>强引用状态<br>软引用<br>弱引用<br>finalize<br>幻象引用<br>unreachable</p>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ul>
+<li>怎么排查幻象引用的堆积问题？</li>
+</ul>
+
       
 
       
@@ -342,11 +356,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -354,11 +368,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">工具</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -366,11 +376,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+                <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
               </li>
              
               <li class="article-tag-list-item">
