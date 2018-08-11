@@ -8,51 +8,45 @@
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>SpringMVC学习篇（二） | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Spring Web MVC简介
-Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
+  <meta name="description" content="Spring Web MVC简介Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
 
 Spring Web MVC优势
-
 与Spring框架集成（AOP、IOC）
 约定大于配置的契约式编程
 简单的Web层单元测试
 灵活地URL到页面控制器的映射
 模型数据通过Map数据结构实现，容易与其他视图技术集成
 强大的JSP标签库
-灵活的本地">
+灵活的本地化、">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC学习篇（二）">
 <meta property="og:url" content="https://github.com/fblq/2015/08/19/SpringMVC学习篇（二）/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="Spring Web MVC简介
-Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
+<meta property="og:description" content="Spring Web MVC简介Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
 
 Spring Web MVC优势
-
 与Spring框架集成（AOP、IOC）
 约定大于配置的契约式编程
 简单的Web层单元测试
 灵活地URL到页面控制器的映射
 模型数据通过Map数据结构实现，容易与其他视图技术集成
 强大的JSP标签库
-灵活的本地">
+灵活的本地化、">
 <meta property="og:image" content="https://github.com/fblq/\img\SpringMVC请求响应模型.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\SpringMVC架构.JPG">
-<meta property="og:updated_time" content="2018-07-28T12:39:52.000Z">
+<meta property="og:updated_time" content="2018-08-11T10:22:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC学习篇（二）">
-<meta name="twitter:description" content="Spring Web MVC简介
-Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
+<meta name="twitter:description" content="Spring Web MVC简介Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。
 
 Spring Web MVC优势
-
 与Spring框架集成（AOP、IOC）
 约定大于配置的契约式编程
 简单的Web层单元测试
 灵活地URL到页面控制器的映射
 模型数据通过Map数据结构实现，容易与其他视图技术集成
 强大的JSP标签库
-灵活的本地">
+灵活的本地化、">
 <meta name="twitter:image" content="https://github.com/fblq/\img\SpringMVC请求响应模型.jpg">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
@@ -191,11 +185,9 @@ Spring Web MVC优势
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Spring-Web-MVC简介"><a href="#Spring-Web-MVC简介" class="headerlink" title="Spring Web MVC简介"></a>Spring Web MVC简介</h2><hr>
-<p>Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。</p>
+        <h2 id="Spring-Web-MVC简介"><a href="#Spring-Web-MVC简介" class="headerlink" title="Spring Web MVC简介"></a>Spring Web MVC简介</h2><p>Spring Web MVC是一种基于请求-响应模型，使用MVC架构模式思想的轻量级Web框架，能够简化WEB开发。</p>
 <hr>
-<h2 id="Spring-Web-MVC优势"><a href="#Spring-Web-MVC优势" class="headerlink" title="Spring Web MVC优势"></a>Spring Web MVC优势</h2><hr>
-<ol>
+<h2 id="Spring-Web-MVC优势"><a href="#Spring-Web-MVC优势" class="headerlink" title="Spring Web MVC优势"></a>Spring Web MVC优势</h2><ol>
 <li>与Spring框架集成（AOP、IOC）</li>
 <li>约定大于配置的契约式编程</li>
 <li>简单的Web层单元测试</li>
@@ -206,8 +198,7 @@ Spring Web MVC优势
 <li>简单的异常处理</li>
 </ol>
 <hr>
-<h2 id="Spring-Web-MVC架构"><a href="#Spring-Web-MVC架构" class="headerlink" title="Spring Web MVC架构"></a>Spring Web MVC架构</h2><h3 id="请求-响应模型"><a href="#请求-响应模型" class="headerlink" title="请求-响应模型"></a>请求-响应模型</h3><hr>
-<p>Spring Web MVC是一个基于请求驱动的Web框架，使用了前端控制器模式进行设计，根据请求映射规则分发给相应的页面控制器进行处理，请求-响应模型如下图所示。<br><img src="\img\SpringMVC请求响应模型.jpg" alt="SpringMVC请求响应模型"><br>具体执行步骤如下：</p>
+<h2 id="Spring-Web-MVC架构"><a href="#Spring-Web-MVC架构" class="headerlink" title="Spring Web MVC架构"></a>Spring Web MVC架构</h2><h3 id="请求-响应模型"><a href="#请求-响应模型" class="headerlink" title="请求-响应模型"></a>请求-响应模型</h3><p>Spring Web MVC是一个基于请求驱动的Web框架，使用了前端控制器模式进行设计，根据请求映射规则分发给相应的页面控制器进行处理，请求-响应模型如下图所示。<br><img src="\img\SpringMVC请求响应模型.jpg" alt="SpringMVC请求响应模型"><br>具体执行步骤如下：</p>
 <ol>
 <li>首先用户发送请求—&gt;前端控制器，前端控制器根据请求信息（如URL）来决定选择哪一个页面控制器进行处理并把请求委托给它，即以前的控制器的控制逻辑部分；图中的1、2步骤；</li>
 <li>页面控制器接收到请求后，进行功能处理，首先需要收集和绑定请求参数到一个对象，这个对象在Spring Web MVC中叫命令对象，并进行验证，然后将命令对象委托给业务对象进行处理；处理完毕后返回一个ModelAndView（模型数据和逻辑视图名）；图中的3、4、5步骤；</li>
@@ -225,8 +216,7 @@ Spring Web MVC优势
 <li>不同的视图技术如何使用相应的模型数据？（map）</li>
 </ol>
 <hr>
-<h3 id="MVC核心架构"><a href="#MVC核心架构" class="headerlink" title="MVC核心架构"></a>MVC核心架构</h3><hr>
-<p>Spring Web MVC核心架构图，如下图所示。<br><img src="\img\SpringMVC架构.JPG" alt="SpringMVC架构图"><br>核心架构的具体流程步骤如下：</p>
+<h3 id="MVC核心架构"><a href="#MVC核心架构" class="headerlink" title="MVC核心架构"></a>MVC核心架构</h3><p>Spring Web MVC核心架构图，如下图所示。<br><img src="\img\SpringMVC架构.JPG" alt="SpringMVC架构图"><br>核心架构的具体流程步骤如下：</p>
 <ol>
 <li>首先用户发送请求——&gt;DispatcherServlet，前端控制器收到请求后自己不进行处理，而是委托给其他的解析器进行处理，作为统一访问点，进行全局的流程控制；</li>
 <li>DispatcherServlet——&gt;HandlerMapping， HandlerMapping将会把请求映射为HandlerExecutionChain对象（包含一个Handler处理器（页面控制器）对象、多个HandlerInterceptor拦截器）对象，通过这种策略模式，很容易添加新的映射策略；</li>
@@ -280,7 +270,7 @@ Spring Web MVC优势
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">俯瞰SpringMVC</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">SpringMVC</a>
         		</li>
       		
 		</ul>
@@ -439,15 +429,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">俯瞰SpringMVC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -455,7 +441,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">对象生命周期</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -468,10 +462,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">基础概念</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">对象生命周期</a>
               </li>
             
             <div class="clearfix"></div>
