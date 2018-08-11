@@ -6,45 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/fblq">
-  <title>I/O概念基础 | fblq</title>
+  <title>java异常处理 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+  <meta name="description" content="preparement meets opportunity">
 <meta property="og:type" content="article">
-<meta property="og:title" content="I/O概念基础">
-<meta property="og:url" content="https://github.com/fblq/2015/04/06/I-O操作基础/index.html">
+<meta property="og:title" content="java异常处理">
+<meta property="og:url" content="https://github.com/fblq/2018/08/11/java异常处理/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
-<meta property="og:updated_time" content="2018-08-11T10:32:49.000Z">
+<meta property="og:description" content="preparement meets opportunity">
+<meta property="og:updated_time" content="2018-08-11T10:31:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="I/O概念基础">
-<meta name="twitter:description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+<meta name="twitter:title" content="java异常处理">
+<meta name="twitter:description" content="preparement meets opportunity">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -162,56 +135,27 @@ I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-I-O操作基础" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-java异常处理" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      I/O概念基础
+      java异常处理
     </h1>
   
 
         
-        <a href="/2015/04/06/I-O操作基础/" class="archive-article-date">
-  	<time datetime="2015-04-06T01:54:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-04-06</time>
+        <a href="/2018/08/11/java异常处理/" class="archive-article-date">
+  	<time datetime="2018-08-11T10:30:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
-<p>I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O</p>
-</blockquote>
-<p>一次完整的I/O操作包括两个阶段：</p>
-<blockquote>
-<p>1）数据准备（内核准备数据供I/O操作使用）<br>2）数据拷贝（将内核中的数据拷贝到用户进程）</p>
-</blockquote>
-<hr>
-<h2 id="阻塞I-O"><a href="#阻塞I-O" class="headerlink" title="阻塞I/O"></a>阻塞I/O</h2><blockquote>
-<p>用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户进程中。</p>
-</blockquote>
-<hr>
-<h2 id="非阻塞I-O"><a href="#非阻塞I-O" class="headerlink" title="非阻塞I/O"></a>非阻塞I/O</h2><blockquote>
-<p>进程发出I/O请求后，CPU会返回一个ERROR的信息，在CPU准备数据的时候，进程不会阻塞，但进程会去不断轮询CPU是否已经准备好数据，等到CPU准备好时，在进程将数据从内核拷贝到进程中的过程中，进程是阻塞。</p>
-</blockquote>
-<hr>
-<h2 id="复用I-O"><a href="#复用I-O" class="headerlink" title="复用I/O"></a>复用I/O</h2><blockquote>
-<p>和非阻塞I/O的原理差不多，不过通过I/O复用的形式，可以同时支持多个连接。（select/epoll）</p>
-</blockquote>
-<hr>
-<h2 id="同步信号I-O"><a href="#同步信号I-O" class="headerlink" title="同步信号I/O"></a>同步信号I/O</h2><blockquote>
-<p>内核和进程通过signal通信，进程不用去不断查询CPU是否准备好数据，CPU准备好数据后会通过signal来通知进程，然后进程再将数据从内核拷贝用户进程。</p>
-</blockquote>
-<hr>
-<h2 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a>异步I/O</h2><blockquote>
-<p>进程只要向CPU发送I/O请求，数据准备和数据拷贝都有CPU完成，等CPU把事情都做完了才通知进程。</p>
-</blockquote>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>前四者均存在进程阻塞，都属于同步I/O；只有异步I/O下，进程完全没有阻塞。</p>
-
+        
       
 
       
@@ -250,24 +194,13 @@ I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">java基础</a>
         		</li>
       		
 		</ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/网络基础//" class="article-tag-list-link color5">网络基础</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
 
       
 
@@ -280,18 +213,18 @@ I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
   
 <nav id="article-nav">
   
-    <a href="/2015/08/16/SpringMVC学习篇（一）/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/08/11/java异常底层实现/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          SpringMVC学习篇（一）
+          java异常底层实现
         
       </div>
     </a>
   
   
-    <a href="/2015/04/03/一致性Hash算法/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">一致性Hash算法</div>
+    <a href="/2018/08/11/java对象的生命周期/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java对象的生命周期</div>
       <i class="icon-circle-right"></i>
     </a>
   
