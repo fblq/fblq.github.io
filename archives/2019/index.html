@@ -6,32 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/fblq">
-  <title>一致性Hash算法 | fblq</title>
+  <title>Archives: 2019 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。
-
-应用场景比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：">
-<meta property="og:type" content="article">
-<meta property="og:title" content="一致性Hash算法">
-<meta property="og:url" content="https://github.com/fblq/2015/04/03/一致性Hash算法/index.html">
+  <meta name="description" content="preparement meets opportunity">
+<meta property="og:type" content="website">
+<meta property="og:title" content="fblq">
+<meta property="og:url" content="https://github.com/fblq/archives/2019/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。
-
-应用场景比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/circle.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/object.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/cache.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/remove.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/add.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/virtual.JPG">
-<meta property="og:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/map.JPG">
-<meta property="og:updated_time" content="2018-07-29T03:58:42.000Z">
+<meta property="og:description" content="preparement meets opportunity">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一致性Hash算法">
-<meta name="twitter:description" content="引言consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。
-
-应用场景比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：">
-<meta name="twitter:image" content="http://www.codeproject.com/KB/recipes/lib-conhash/circle.JPG">
+<meta name="twitter:title" content="fblq">
+<meta name="twitter:description" content="preparement meets opportunity">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -149,201 +134,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-一致性Hash算法" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      一致性Hash算法
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/01/04/月亮与六便士有感/" class="archive-article-date">
+  	<time datetime="2019-01-03T20:23:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-04</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/01/04/月亮与六便士有感/">月亮与六便士有感</a>
     </h1>
   
 
-        
-        <a href="/2015/04/03/一致性Hash算法/" class="archive-article-date">
-  	<time datetime="2015-04-03T12:17:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-04-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。</p>
-<hr>
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：</p>
-<blockquote>
-<p><strong>hash(object)%N</strong></p>
-</blockquote>
-<p>一切都运行正常，再考虑如下的两种情况；</p>
-<blockquote>
-<ol>
-<li>一个cache m down掉了（在实际应用中必须要考虑这种情况），这样所有映射到cache m的对象都会失效，怎么办，需要把cache m从cache中移除，这时候cache是N-1台，映射公式变成了<strong>hash(object)%(N-1)</strong>；</li>
-<li>由于访问加重，需要添加cache，这时候cache是N+1 台，映射公式变成了<strong>hash(object)%(N+1)</strong>；</li>
-</ol>
-</blockquote>
-<p>1和2意味着什么？这意味着突然之间几乎所有的 cache 都失效了。对于服务器而言，这是一场灾难，洪水般的访问都会直接冲向后台服务器；<br>再来考虑第三个问题，由于硬件能力越来越强，你可能想让后面添加的节点多做点活，显然上面的 hash 算法也做不到。<br>有什么方法可以改变这个状况呢，这就是consistent hashing…</p>
-<hr>
-<h2 id="hash算法和单调性"><a href="#hash算法和单调性" class="headerlink" title="hash算法和单调性"></a>hash算法和单调性</h2><p>Hash算法的一个衡量指标是单调性（Monotonicity），定义如下：</p>
-<blockquote>
-<p>单调性是指如果已经有一些object通过哈希分派到了相应的cache中，又有新的cache加入到系统中。哈希的结果应能够保证原有已分配的object可以被映射到新的cache中去，而不会被映射到旧的cache集合中的其他cache区。</p>
-</blockquote>
-<p>容易看到，上面的简单hash算法<strong>hash(object)%N</strong>难以满足单调性要求。</p>
-<hr>
-<h2 id="consistent-hashing算法的原理"><a href="#consistent-hashing算法的原理" class="headerlink" title="consistent hashing算法的原理"></a>consistent hashing算法的原理</h2><p>consistent hashing是一种hash算法，简单的说，在移除/添加一个cache时，它能够尽可能小的改变已存在key的映射关系，尽可能的满足单调性的要求。<br>下面就来按照5个步骤简单讲讲consistent hashing算法的基本原理。</p>
-<hr>
-<h3 id="环形hash空间"><a href="#环形hash空间" class="headerlink" title="环形hash空间"></a>环形hash空间</h3><p>考虑通常的hash算法都是将value映射到一个32位的key值，也即是 <strong>0~2^32-1</strong> 次方的数值空间；我们可以将这个空间想象成一个首（0）尾（2^32-1）相接的圆环，如下图所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/circle.JPG" alt="环形hash空间"></p>
-<hr>
-<h3 id="把对象映射到hash空间"><a href="#把对象映射到hash空间" class="headerlink" title="把对象映射到hash空间"></a>把对象映射到hash空间</h3><p>接下来考虑4个对象object1~object4，通过hash函数计算出的hash值key在环上的分布如下图所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(object1) = key1;</span><br><span class="line">… …</span><br><span class="line">hash(object4) = key4;</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/object.JPG" alt="图2 4个对象的key值分布"></p>
-<hr>
-<h3 id="把cache映射到hash空间"><a href="#把cache映射到hash空间" class="headerlink" title="把cache映射到hash空间"></a>把cache映射到hash空间</h3><p>Consistent hashing的基本思想就是将object和cache都映射到同一个hash数值空间中，并且使用相同的hash算法。<br>假设当前有A，B，C共3台cache，那么其映射结果将如下图所示，他们在hash空间中，以对应的hash值排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(cache A) = key A;</span><br><span class="line">… …</span><br><span class="line">hash(cache C) = key C;</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/cache.JPG" alt="图3 cache和对象的key值分布"></p>
-<p>说到这里，顺便提一下cache的hash计算，一般的方法可以使用cache机器的IP地址或者机器名作为hash输入。</p>
-<hr>
-<h3 id="把object映射到cache"><a href="#把object映射到cache" class="headerlink" title="把object映射到cache"></a>把object映射到cache</h3><p>现在cache和object都已经通过同一个hash算法映射到hash数值空间中了，接下来要考虑的就是如何将object映射到cache上面了。<br>在这个环形空间中，如果沿着顺时针方向从object的key值出发，直到遇见一个cache，那么就将该对象存储在这个cache上，因为object和cache的hash值是固定的，因此这个cache必然是唯一、确定的。<br>继续上面的例子（参见图3），根据上面的方法，对象object1将被存储到cache A上；object2和object3被存储到cache C；object4被存储到cache B；</p>
-<hr>
-<h3 id="考察cache的变动"><a href="#考察cache的变动" class="headerlink" title="考察cache的变动"></a>考察cache的变动</h3><p>前面讲过，通过hash然后求余的方法带来的最大问题就在于不能满足单调性，当cache有所变动时，cache会失效，进而对后台服务器造成巨大的冲击，现在就来分析分析consistent hashing算法。</p>
-<hr>
-<h4 id="移除cache"><a href="#移除cache" class="headerlink" title="移除cache"></a>移除cache</h4><p>考虑假设cache B挂掉了，根据上面讲到的映射方法，这时受影响的将仅是那些沿cache B逆时针遍历直到下一个cache（cache C）之间的对象，也即是本来映射到cache B上的那些对象。<br>因此这里仅需要变动对象object4，将其重新映射到cache C上即可，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/remove.JPG" alt="图4 Cache B 被移除后的cache映射"></p>
-<hr>
-<h4 id="添加cache"><a href="#添加cache" class="headerlink" title="添加cache"></a>添加cache</h4><p>再考虑添加一台新的cache D的情况，假设在这个环形hash空间中，cache D被映射在对象object2和object3之间。这时受影响的将仅是那些沿cache D逆时针遍历直到下一个cache（ cache B ）之间的对象（它们是也本来映射到cache C上对象的一部分），将这些对象重新映射到cache D上即可。<br>因此这里仅需要变动对象object2，将其重新映射到cache D上，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/add.JPG" alt="图5 添加 cache D 后的映射关系"></p>
-<hr>
-<h2 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h2><p>考量Hash算法的另一个指标是平衡性 (Balance) ，定义如下：</p>
-<blockquote>
-<p>平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。</p>
-</blockquote>
-<p>hash算法并不是保证绝对的平衡，如果<strong>cache少</strong>的话，对象并不能被均匀的映射到cache上，比如在上面的例子中，仅部署cache A和 cache C的情况下，在4个对象中，cache A仅存储了object1，而cache C则存储了object2、object3和object4；分布是很不均衡的。<br>为了解决这种情况，consistent hashing引入了“虚拟节点”的概念，它可以如下定义：</p>
-<blockquote>
-<p>“虚拟节点”（virtual node）是实际节点在 hash 空间的复制品（replication），一个实际节点对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在hash空间中以hash值排列。</p>
-</blockquote>
-<p>仍以仅部署cache A和cache C的情况为例，在图4中我们已经看到，cache分布并不均匀。现在我们引入虚拟节点，并设置“复制个数”为2，这就意味着一共会存在4个“虚拟节点”，cache A1、cache A2代表了cache A；cache C1、cache C2代表了cache C。假设一种比较理想的情况，如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/virtual.JPG" alt="图6 引入“虚拟节点”后的映射关系"></p>
-<p>此时，对象到“虚拟节点”的映射关系为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">objec1-&gt;cache A2 ； objec2-&gt;cache A1 ；</span><br><span class="line">objec3-&gt;cache C1 ； objec4-&gt;cache C2 ；</span><br></pre></td></tr></table></figure></p>
-<p>因此对象object1和object2都被映射到了cache A上，而object3和object4映射到了cache C上,平衡性有了很大提高。</p>
-<p>引入“虚拟节点”后，映射关系就从{object-&gt;cache}转换到了{object-&gt;虚拟节点-&gt;cache}，查询物体所在cache时的映射关系变成了如下所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/map.JPG" alt="图7 查询对象所在 cache"></p>
-<p>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设cache A的IP地址为202.168.14.241。<br>引入“虚拟节点”前，计算cache A的hash值：</p>
-<blockquote>
-<p><strong>Hash(“202.168.14.241”);</strong></p>
-</blockquote>
-<p>引入“虚拟节点”后，计算“虚拟节”点cache A1和cache A2的hash值：</p>
-<blockquote>
-<p><strong>Hash(“202.168.14.241#1”);</strong>  // cache A1<br><strong>Hash(“202.168.14.241#2”);</strong>  // cache A2</p>
-</blockquote>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以上是Consistent hashing的基本原理,仅供参考。</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/weixin.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">服务治理</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/工程应用//" class="article-tag-list-link color5">工程应用</a>
+        			<a href="/categories/一本好书//" class="article-tag-list-link color5">一本好书</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2015/04/06/I-O操作基础/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          I/O概念基础
-        
-      </div>
-    </a>
   
   
-    <a href="/2015/03/25/epoll与select/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">epoll与select</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -366,8 +221,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
