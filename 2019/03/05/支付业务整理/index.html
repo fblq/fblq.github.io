@@ -8,30 +8,30 @@
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>支付业务整理 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言从2016年7月开始工作到现在，接触的业务都是支付业务，从聚合供应商到支付机构，不涉及支付渠道和银行，最近感觉脑子里的业务知识很凌乱，想简单系统化地总结一下，以后继续走下去也好有一个参考。
+  <meta name="description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
 产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能">
+系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta property="og:type" content="article">
 <meta property="og:title" content="支付业务整理">
 <meta property="og:url" content="https://github.com/fblq/2019/03/05/支付业务整理/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言从2016年7月开始工作到现在，接触的业务都是支付业务，从聚合供应商到支付机构，不涉及支付渠道和银行，最近感觉脑子里的业务知识很凌乱，想简单系统化地总结一下，以后继续走下去也好有一个参考。
+<meta property="og:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
 产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能">
+系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta property="og:image" content="https://github.com/fblq/\img\支付概述图.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\支付产品架构图.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\交易信息流与资金流.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\最简单的支付系统.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\资金视角系统关系.jpg">
-<meta property="og:updated_time" content="2019-03-07T05:04:14.000Z">
+<meta property="og:updated_time" content="2019-03-07T09:46:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="支付业务整理">
-<meta name="twitter:description" content="引言从2016年7月开始工作到现在，接触的业务都是支付业务，从聚合供应商到支付机构，不涉及支付渠道和银行，最近感觉脑子里的业务知识很凌乱，想简单系统化地总结一下，以后继续走下去也好有一个参考。
+<meta name="twitter:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
 产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能">
+系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta name="twitter:image" content="https://github.com/fblq/\img\支付概述图.jpg">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
@@ -170,7 +170,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>从2016年7月开始工作到现在，接触的业务都是支付业务，从聚合供应商到支付机构，不涉及支付渠道和银行，最近感觉脑子里的业务知识很凌乱，想简单系统化地总结一下，以后继续走下去也好有一个参考。</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。</p>
 <h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><ul>
 <li>产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。</li>
 <li>系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能力、产品能力、场景能力的层次结构说一下业务流程。</li>
@@ -179,7 +179,17 @@
 </ul>
 <h2 id="产品架构"><a href="#产品架构" class="headerlink" title="产品架构"></a>产品架构</h2><h3 id="参与方"><a href="#参与方" class="headerlink" title="参与方"></a>参与方</h3><p>支付业务中涉及到的参与方的关系如下：<br><img src="\img\支付概述图.jpg" alt=""></p>
 <p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的产品关系如下：<br><img src="\img\支付产品架构图.jpg" alt=""></p>
-<p>业务层：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台<br>接入层：用户门户、商户门户、api、H5/SDK<br>收单层: 下单、构建收银台、充值、转账、提现、收款、退款、付款、查询<br>核心层：收款、退款、付款<br>渠道层：实名、签约、协议支付、商业委托支付、网关支付、认证支付、退款、付款、差错<br>外部合作方：银联、网联、支付机构、商业银行<br>（支付层：收单、交易核心、用户、商户、账务）</p>
+<ul>
+<li>业务层：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台</li>
+<li>接入层：用户门户、商户门户、api、H5/SDK</li>
+<li>收单层: 下单、构建收银台、充值、转账、提现、收款、退款、付款、查询</li>
+<li>支付层：收款、退款、付款、查询、回调</li>
+<li>渠道层：实名、签约、协议支付、商业委托支付、网关支付、认证支付、退款、付款、差错</li>
+<li>外部合作方：银联、网联、支付机构、商业银行</li>
+</ul>
+<blockquote>
+<p>产品work机制：<br>1.先基于用户门户、商户门户积累的用户资源，在任何一个需要支付的页面入口处，通过一些营销手段引导用户开通支付功能，即开通支付账户并绑定银行卡，积累了这些账户资源后，就可以开始在线上开展收单支付业务了。<br>2.通过接入层和收单层的能力在线上服务消费的业务链终端开展收单业务，用户选择服务消费、下单、进入收银台、选择支付方式发起支付，支付层就能结合客户的开户信息及账户信息，确定商户的手续费和结算方式，同时能根据支付方式信息（银行卡、余额、营销）路由出支付通道及相应的通道手续费，向渠道层发起支付，渠道层根据选出的支付通道按照格式要求组装报文，将支付请求发往网联、银联。<br>3.支付层会对交易凭证数据进行持久化，涉及的核心数据有交易双方的用户信息、支付产品信息、交易订单信息、银行卡信息、通道信息、商户的结算信息，用于上报结算时给清结算使用。</p>
+</blockquote>
 <h3 id="信息流和资金流"><a href="#信息流和资金流" class="headerlink" title="信息流和资金流"></a>信息流和资金流</h3><p>用户、服务提供商有自己的银行账户和支付账户，支付机构有自己的对公账户和备付金账户，先看一下支付公司、网联、央行、银行这四个角色在交易信息流和资金流上的交互关系：（其中备付金为支付公司在央行开的备付金集中存管账户）<br><img src="\img\交易信息流与资金流.jpg" alt=""></p>
 <p>类比滴滴的打车场景（乘客、司机、网约车平台、滴滴支付），说一下新零售场景（用户、供应商、新零售商、支付机构），看一下支付公司怎么能帮助平台型小企业做生意。</p>
 <blockquote>
@@ -225,15 +235,15 @@
 <li>mysql机房数据安全：独立机房，访问入口有严格的ACL白名单机制。</li>
 </ul>
 <h3 id="账户安全"><a href="#账户安全" class="headerlink" title="账户安全"></a>账户安全</h3><blockquote>
-<p>用户在支付机构开一个支付账户，可以用于充值、转账、提现、消费、理财、保险、信贷等，基本能渗透到生活中的方方面面，支付使用的频次很高。</p>
+<p>用户在支付机构开一个支付账户，可以用于充值、转账、提现、消费、理财、保险、信贷等，基本能渗透到生活中的方方面面，支付使用的频次很高，因此安全性很重要。</p>
 </blockquote>
 <ul>
-<li>一个支付账户允许用户管理多张银行卡，用户每次支付时可以不用输入银行卡号就可以支付，支付方便的同时，而且账户信息是隐藏在用户信息后面的。</li>
-<li>支付机构跟合作方的信息交互中是通过协议进行的，即使数据请求被中间人攻击，非对称加密算法被破解了，最后拿到的也不是用户真实的银行账户信息。</li>
+<li>一个支付账户允许用户管理多张银行卡，用户每次支付时可以不用输入银行卡号就可以支付，支付方便的同时，账户信息是隐藏在用户信息后面，不会直接暴露在使用场景中。</li>
+<li>需要用户开通支付账户的产品是快捷支付，用户在用快捷支付时，支付机构跟渠道交互是通过协议号进行的，即使渠道请求被中间人攻击，最后拿到的也不是用户真实的银行账户信息。</li>
 </ul>
 <h3 id="资金安全"><a href="#资金安全" class="headerlink" title="资金安全"></a>资金安全</h3><ul>
 <li>入账、出账操作的事务性。</li>
-<li>划分多种账户，对资金进行专款专用。</li>
+<li>对账户进行分门别类，可以对资金进行专款专用。</li>
 </ul>
 <h2 id="支付合规"><a href="#支付合规" class="headerlink" title="支付合规"></a>支付合规</h2><ul>
 <li>思考：</li>
@@ -446,19 +456,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">java基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -466,7 +468,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">工具</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">java基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -475,10 +489,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">业务整理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
             
             <div class="clearfix"></div>
