@@ -136,6 +136,165 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-支付业务整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/05/支付业务整理/">支付业务整理</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/05/支付业务整理/" class="archive-article-date">
+  	<time datetime="2019-03-05T02:24:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>从2016年7月开始工作到现在，接触的业务都是支付业务，从聚合供应商到支付机构，不涉及支付渠道和银行，最近感觉脑子里的业务知识很凌乱，想简单系统化地总结一下，以后继续走下去也好有一个参考。</p>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><ul>
+<li>产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。</li>
+<li>系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能力、产品能力、场景能力的层次结构说一下业务流程。</li>
+<li>系统架构视角，从资金层的角度，说一下支付系统和清结算、账务、会计、对账、差错之间的关系。</li>
+<li>支付业务的底线，从安全角度，说一下支付业务发展中需要重点关注的账户、资金、数据的安全性；从商户二清和客户备付金角度，说一下合规的背景和目前的解决方案。</li>
+</ul>
+<h2 id="产品架构"><a href="#产品架构" class="headerlink" title="产品架构"></a>产品架构</h2><h3 id="参与方"><a href="#参与方" class="headerlink" title="参与方"></a>参与方</h3><p>支付业务中涉及到的参与方的关系如下：<br><img src="\img\支付概述图.jpg" alt=""></p>
+<p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的产品关系如下：<br><img src="\img\支付产品架构图.jpg" alt=""></p>
+<p>业务层：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台<br>接入层：用户门户、商户门户、api、H5/SDK<br>收单层: 下单、构建收银台、充值、转账、提现、收款、退款、付款、查询<br>核心层：收款、退款、付款<br>渠道层：实名、签约、协议支付、商业委托支付、网关支付、认证支付、退款、付款、差错<br>外部合作方：银联、网联、支付机构、商业银行<br>（支付层：收单、交易核心、用户、商户、账务）</p>
+<h3 id="信息流和资金流"><a href="#信息流和资金流" class="headerlink" title="信息流和资金流"></a>信息流和资金流</h3><p>用户、服务提供商有自己的银行账户和支付账户，支付机构有自己的对公账户和备付金账户，先看一下支付公司、网联、央行、银行这四个角色在交易信息流和资金流上的交互关系：（其中备付金为支付公司在央行开的备付金集中存管账户）<br><img src="\img\交易信息流与资金流.jpg" alt=""></p>
+<p>类比滴滴的打车场景（乘客、司机、网约车平台、滴滴支付），说一下新零售场景（用户、供应商、新零售商、支付机构），看一下支付公司怎么能帮助平台型小企业做生意。</p>
+<blockquote>
+<p><strong>1.用户支付</strong>（支付公司向新零售商收取手续费）<br>资金流：用户银行卡（-100）-&gt;支付公司的备付金账户(+100)<br><strong><em>支付公司清结算：</em></strong><br>信息流：待清算账户（计算手续费）-&gt;待结算账户(资金确认)-&gt;现金账户（供应商+80：新零售商+20）<br><strong>2.新零售商提现</strong><br>信息流：现金账户（-80）<br>资金流：备付金（-80）-&gt;新零售商的银行账户（+80）<br><strong>3.用户充值</strong><br>信息流：用户支付账户的现金账户（+100）<br>资金流：用户银行卡（-100）-&gt;支付公司的备付金账户（+100）<br><strong>4.用户跨行转账（建行-&gt;招行）</strong><br>资金流：用户建行卡（-100）-&gt;支付公司的备付金账户（+100） AND 支付公司的备付金账户（-100）-&gt;用户招行卡（+100）<br><strong><em>收取手续费</em></strong><br>信息流：平台手续费（+1）<br>资金流：用户建行卡（-1）-&gt;支付公司的备付金账户（+1）</p>
+</blockquote>
+<ul>
+<li>思考：</li>
+<li>1.顺风车的乘客支付了100块钱，司机和顺风车服务提供商怎么分这一笔钱？支付公司又怎么收取手续费？</li>
+<li>2.支付公司向服务提供商提供清结算能力、分账能力时，信息流和资金流是什么样的？</li>
+</ul>
+<h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><ul>
+<li>需要考虑的点：</li>
+<li>产品要求资金正确、账户安全、业务合规。</li>
+<li>系统要求有稳定性好、能扛的并发量高、端上消费的响应及时、线上问题的运维高效、交易数据安全。</li>
+</ul>
+<h3 id="支付信息流视角的架构"><a href="#支付信息流视角的架构" class="headerlink" title="支付信息流视角的架构"></a>支付信息流视角的架构</h3><p><img src="\img\最简单的支付系统.jpg" alt=""></p>
+<ul>
+<li>名字解释：</li>
+<li>渠道：类似银联、网联、支付机构，支持多家银行的收付款能力，也就是一个渠道下有多个通道。</li>
+<li>通道：单家银行的收付款能力是一个通道。</li>
+</ul>
+<blockquote>
+<p>收单层向业务层输出支付能力，提供的核心接口有下单接口、收银台接口、支付接口、结果查询接口，给交易核心层屏蔽业务差异。<br>交易核心层向收单层提供收款、退款、付款的能力，同时留存交易凭证信息供清结算系统使用，执行具体的业务时会检查账户状态、上报风控、进行路由选择通道及确定手续费、结算方式。<br>渠道层根据交易核心选择的通道按照渠道要求的格式组装数据，还有敏感数据的对称加密、数据的非对称加密和签名，将支付指令发到渠道，完成信息流到资金流的对接，向交易核心屏蔽渠道、银行之间的差异。</p>
+</blockquote>
+<ul>
+<li>思考：</li>
+<li>1.银行在受理退款时，跟原交易的是否完成清算有关，即需要原交易成功4小时后才受理退款，支付机构如何处理用户在线支付后的实时退款？</li>
+<li>2.余额+银行卡组合支付，如何保证事务性？</li>
+<li>3.外部渠道超时的情况下，用户重复提交支付时，怎么防止渠道侧重复扣款？</li>
+<li>4.如果选用mysql做数据持久化的话，mysql的主从架构怎么设计？</li>
+<li>5.提现场景下，mysql主库宕机，从库升主库时，数据不能完全从主库同步过来的情况下，可反复提现导致的资金损失风险怎么控制？</li>
+<li>6.服务重启时，机器正在处理的请求如何处理？重启前进行进程上下文的保存，重启后再恢复进程。</li>
+<li>7.如何保证幂等？订单信息严格按照状态流转的设计进行更新。</li>
+</ul>
+<h3 id="支付资金流视角的架构"><a href="#支付资金流视角的架构" class="headerlink" title="支付资金流视角的架构"></a>支付资金流视角的架构</h3><p><img src="\img\资金视角系统关系.jpg" alt=""></p>
+<ul>
+<li>思考：</li>
+<li>1.差错业务为什么很难做？跟渠道、收款行、付款行打交道就没有容易的事情。</li>
+</ul>
+<h2 id="支付安全"><a href="#支付安全" class="headerlink" title="支付安全"></a>支付安全</h2><h3 id="数据安全"><a href="#数据安全" class="headerlink" title="数据安全"></a>数据安全</h3><ul>
+<li>接口数据安全：利用数字信封对敏感信息进行对称加解密、对接口数据进行非对称加解密、接口签名。</li>
+<li>日志数据安全：对手机号、身份证号、银行卡号、支付账号等信息进行脱敏。</li>
+<li>mysql机房数据安全：独立机房，访问入口有严格的ACL白名单机制。</li>
+</ul>
+<h3 id="账户安全"><a href="#账户安全" class="headerlink" title="账户安全"></a>账户安全</h3><blockquote>
+<p>用户在支付机构开一个支付账户，可以用于充值、转账、提现、消费、理财、保险、信贷等，基本能渗透到生活中的方方面面，支付使用的频次很高。</p>
+</blockquote>
+<ul>
+<li>一个支付账户允许用户管理多张银行卡，用户每次支付时可以不用输入银行卡号就可以支付，支付方便的同时，而且账户信息是隐藏在用户信息后面的。</li>
+<li>支付机构跟合作方的信息交互中是通过协议进行的，即使数据请求被中间人攻击，非对称加密算法被破解了，最后拿到的也不是用户真实的银行账户信息。</li>
+</ul>
+<h3 id="资金安全"><a href="#资金安全" class="headerlink" title="资金安全"></a>资金安全</h3><ul>
+<li>入账、出账操作的事务性。</li>
+<li>划分多种账户，对资金进行专款专用。</li>
+</ul>
+<h2 id="支付合规"><a href="#支付合规" class="headerlink" title="支付合规"></a>支付合规</h2><ul>
+<li>思考：</li>
+<li>1.清结算能力如果不受中国支付清算协会统一管理的话，想一种最糟糕的场景，一笔交易可以在多级商户下经过多次清结算，交易的真实资金流没变，虚拟资金流却增加了，现象是否正常？</li>
+<li>2.用户在天猫上买东西后付完款，如果钱立马进了天猫店家的银行卡，店家没发货就卷款潜逃了怎么办？</li>
+<li>3.支付公司一般都是面向广大用户提供服务的，如果用户在服务供应商那消费后，钱立马进了支付公司的银行账户，支付公司挪用资金投资破产了或者卷款潜逃了怎么办？</li>
+</ul>
+<blockquote>
+<p>二清解决法案：获得清结算能力需要央行的批准，了解有清结算能力的组织有银联、网联、支付机构。<br>备付金集中存管：支付机构的客户备付金集中存缴，不得挪用，受央行监管。</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.pingxx.com/" target="_blank" rel="external">Ping++博客</a><br><a href="https://mp.weixin.qq.com/s/rPTWCw8EiSQUm5B-_ju8Vw" target="_blank" rel="external">干货|从入门到实践——财务系统设计详解</a><br><a href="https://mp.weixin.qq.com/s/NeNPXllRm-UMtZ-YHybwVw" target="_blank" rel="external">干货|美团外卖亿级订单下的风控设计</a><br><a href="http://doc.cocolian.cn/" target="_blank" rel="external">凤凰牌老熊-在这里读懂支付</a><br><a href="https://mp.weixin.qq.com/s/9V1VC2Fe9HdGzdvQ2A7wiA" target="_blank" rel="external">实战案例解析：去哪儿网支付系统架构演进全历程</a><br><a href="https://mp.weixin.qq.com/s/k9L8GwFAuzWgs8JRbrnnGA" target="_blank" rel="external">一站式资金解决方案（上）</a><br><a href="https://mp.weixin.qq.com/s/ZBXOlkU9hdRPxXa0Dwfr9Q" target="_blank" rel="external">一站式资金解决方案（下）</a><br><a href="https://mp.weixin.qq.com/s/suBAJrP6uN2kFgHtGz16mw" target="_blank" rel="external">微信高并发资金交易系统设计方案——百亿红包背后的技术支撑</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">业务整理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/支付//" class="article-tag-list-link color3">支付</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/05/支付业务整理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-2019年技术学习整理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -162,10 +321,10 @@
 <h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h3 id="整体"><a href="#整体" class="headerlink" title="整体"></a>整体</h3><p><a href="https://note.youdao.com/ynoteshare1/index.html?id=4cf9e724ed4bb884d877e7dc914f5973&amp;type=note#/" target="_blank" rel="external">java进阶学习成长</a></p>
 <h3 id="基础类（未整理）"><a href="#基础类（未整理）" class="headerlink" title="基础类（未整理）"></a>基础类（未整理）</h3><p><a href="http://www.importnew.com/20386.html" target="_blank" rel="external">java8系列重新认识HashMap</a><br><a href="">String、StringBuilder、StringBuffer对比，源码的实现？适用的场景？</a><br><a href="">HashMap、ConcurrentHashMap，线程安全性、扩容、get/put操作</a><br><a href="">HashMap、LinkedHashMap、TreeMap对比，实现的数据结构？元素是否有序？增删改查的操作流程？</a><br><a href="">ThreadLocal原理，源码实现？底层的数据结构？如何解决hash冲突？WeakReference怎么用的？为什么不用SoftReference？为什么会存在内容泄露，怎么避免？</a><br><a href="">BlockingQueue的特性？有哪些应用场景？跟Semaphore相比有什么不一样？</a><br><a href="">synchronized的实现？跟lock相比的优缺点？性能对比呢，为什么sychronized的性能差？</a><br><a href="">HashMap、HashTable、HashSet的对比？源码实现中的底层数据结构是什么？</a><br><a href="">阻塞队列ArrayBlockingQueue和非阻塞队列ConcurrentLinkedQueue，哪一个适用生产者-消费者模式？</a><br><a href="">Collections.synchronizedMap()和ConcurrentHashMap对比？查看源码谁提供了原子的读-改-写方法？</a></p>
 <h3 id="并发（未整理）"><a href="#并发（未整理）" class="headerlink" title="并发（未整理）"></a>并发（未整理）</h3><p><a href="">原子性、有序性、内存可见性</a><br><a href="">java线程的实现？轻量级进程+线程实现？为什么？</a><br><a href="">AtomicXXX、java同步器、Executors框架，AtomicLong自己写一个怎么实现？</a><br><a href="">java中同步容器有哪些？并发容器有哪些？同步容器的复合操作的线程不安全性怎么解释?怎么解决？隐藏迭代器的ConcurrentModification问题怎么解决？</a><br><a href="https://www.cnblogs.com/kaleidoscope/p/9877174.html" target="_blank" rel="external">如何确保三个线程顺序执行？join、CountDownLatch，是否可以用两个condition来实现？</a></p>
-<h3 id="JVM（未整理）"><a href="#JVM（未整理）" class="headerlink" title="JVM（未整理）"></a>JVM（未整理）</h3><p><a href="">JVM内存的分配，堆区、方法区、虚拟机栈、本地方法栈、程序计数器</a><br><a href="">一个新写的java类，new出来的对象，它的数据都在java内存中哪些地方？从对象创建到回收会经历哪些阶段？</a><br><a href="">JVM内存回收算法，标记-清除算法、复制算法、标记-整理算法的优缺点对比？如何在堆和方法区的内存回收中使用？</a><br><a href="">什么情况下会进行GC？新生代yongGC、老年代FullGC、方法区FullGC</a><br><a href="">新生代频繁GC的原因有哪些？怎么解决？</a><br><a href="">应用程序中如何选择垃圾收集器？Parallel Scavenge和Parallel Old、ParNew和CMS两种组合比较？</a><br><a href="">JVM内存模型，为什么要分为工作内存和主内存？</a><br><a href="">内存泄露、内存溢出问题如何排查？</a><br><a href="">JVM有哪些类加载？双亲委派模型的设计，为什么这么设计？如何自定义一个类加载器？SPI机制是如何打破双亲委派模型的？线程上下文加载器干什么用的？</a></p>
-<h3 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h3><p><a href="http://fblq.github.io/2015/04/06/I-O%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/" target="_blank" rel="external">IO类型有哪些？同步和非同步、阻塞与非阻塞、异步、复用之间的区别在哪？内核准备数据，用户进程还是内核拷贝数据到用户空间？内核和用户进程之间如何通信？连接是否复用？</a><br><a href="http://wiki.jikexueyuan.com/project/java-nio-zh/java-nio-selector.html" target="_blank" rel="external">java nio，什么是NIO? NIO解决了什么问题？Channel、Buffer、Selector的关系？一个连接如何管理多个通道？</a></p>
+<h3 id="JVM（未整理）"><a href="#JVM（未整理）" class="headerlink" title="JVM（未整理）"></a>JVM（未整理）</h3><p><a href="">JVM内存的分配，堆区、方法区、虚拟机栈、本地方法栈、程序计数器的作用和基本原理</a><br><a href="">java8中为什么移除了方法区，新增了元数据空间？</a><br><a href="">一个新写的java类，new出来的对象，它的数据都在java内存中哪些地方？从对象创建到回收会经历哪些阶段？</a><br><a href="">JVM内存回收算法，标记-清除算法、复制算法、标记-整理算法的优缺点对比？如何在堆和方法区的内存回收中使用？</a><br><a href="">什么情况下会进行GC？新生代yongGC、老年代FullGC、方法区FullGC</a><br><a href="">新生代频繁GC的原因有哪些？怎么解决？</a><br><a href="">应用程序中如何选择垃圾收集器？Parallel Scavenge和Parallel Old、ParNew和CMS两种组合比较？</a><br><a href="">JVM内存模型，为什么要分为工作内存和主内存？</a><br><a href="">内存泄露、内存溢出问题如何排查？</a><br><a href="">JVM有哪些类加载？双亲委派模型的设计，为什么这么设计？如何自定义一个类加载器？SPI机制是如何打破双亲委派模型的？线程上下文加载器干什么用的？</a></p>
+<h3 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h3><p><a href="http://fblq.github.io/2015/04/06/I-O%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/" target="_blank" rel="external">IO类型有哪些？同步和非同步、阻塞与非阻塞、异步、复用之间的区别在哪？内核准备数据，用户进程还是内核拷贝数据到用户空间？内核和用户进程之间如何通信？连接是否复用？</a><br><a href="http://wiki.jikexueyuan.com/project/java-nio-zh/java-nio-selector.html" target="_blank" rel="external">java nio，什么是NIO? NIO解决了什么问题？Channel、Buffer、Selector的关系？一个连接如何管理多个通道？</a><br>[字节流FileInputStream和FileOutputStream]<br>[字符流OutStreamWriter、FileWriter和InputStreamReader、FileReader]</p>
 <h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p><a href="https://www.jianshu.com/p/85d141365d39" target="_blank" rel="external">java日志组件选择，log4j、log4j2、logback各自的优缺点在哪</a></p>
-<h2 id="线上运维"><a href="#线上运维" class="headerlink" title="线上运维"></a>线上运维</h2><p><a href="">日志查看与分析：cat、grep、sed、awk、sort、head、tail、uniq、wc</a><br><a href="">线上问题排查：jps、jinfo、ps、grep、top、jstack、jmap</a><br><a href="https://www.cnblogs.com/wwxbi/p/6183081.html" target="_blank" rel="external">磁盘查看：df -h、du -sh、free</a></p>
+<h2 id="线上运维"><a href="#线上运维" class="headerlink" title="线上运维"></a>线上运维</h2><p><a href="">日志查看与分析：cat、grep、sed、awk、sort、head、tail、uniq、wc</a><br><a href="">线上问题排查：jps、jinfo、ps、grep、top、jstack、jmap</a><br><a href="https://www.cnblogs.com/wwxbi/p/6183081.html" target="_blank" rel="external">磁盘查看：df -h、du -sh、free</a><br><a href="https://mp.weixin.qq.com/s/-4P4OM5JOKSeg58VLPHiFA" target="_blank" rel="external">让人欢喜让人忧的正则表达式</a></p>
 <p>常用命令：</p>
 <ul>
 <li>查看某一个进程下每个线程的资源占用情况：top -Hp pid</li>
@@ -175,13 +334,14 @@
 <li>字符串替换、分割处理：sed ‘s/old_str/new_str/g;s/old_str/new_str/g’ a.txt | uniq | wc -l</li>
 <li>字符串列运算、筛选处理：awk ‘{sum=sum+$2};END{print sum}’ a.txt、awk ‘{if($1&gt;100){print $0}}’ a.txt</li>
 </ul>
-<h2 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h2><p><a href="https://blog.csdn.net/cug_jiang126com/article/details/50544728" target="_blank" rel="external">mysql中sql的共享锁和排它锁应用场景，select for update和select lock in share mode的使用场景</a><br><a href="https://blog.csdn.net/seven_3306/article/details/27085275" target="_blank" rel="external">mysql事务隔离级别，如何解决脏读、不可重复读、幻读</a><br><a href="https://www.cnblogs.com/ivictor/p/5735580.html" target="_blank" rel="external">mysql单点问题解决方案</a><br><a href="">mysql如何实现悲观锁和乐观锁？乐观锁通过version如何实现？</a><br><a href="">mysql中的聚集索引和非聚集索引的叶子节点包含哪些数据？实现原理？为什么主键长度不能太长?</a><br><a href="">innodb储存引擎的特性？插入缓存、两次写、自适应hash、异步IO、刷新临接页分别解决了什么问题？</a><br><a href="">innodb缓冲池划分，缓冲池、重做日志缓冲、额外内存池，缓冲池包含数据页、索引页、插入缓冲、锁信息等</a><br><a href="https://www.cnblogs.com/shijingxiang/articles/4743324.html" target="_blank" rel="external">mysql的innodb索引原理详解，什么是聚簇索引？它相比非聚簇索引有什么优缺点？索引和数据、数据变化导致索引B+树的维护</a></p>
+<h2 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h2><p><a href="https://blog.csdn.net/cug_jiang126com/article/details/50544728" target="_blank" rel="external">mysql中sql的共享锁和排它锁应用场景，select for update和select lock in share mode的使用场景</a><br><a href="https://blog.csdn.net/seven_3306/article/details/27085275" target="_blank" rel="external">mysql事务隔离级别，如何解决脏读、不可重复读、幻读</a><br><a href="https://www.cnblogs.com/ivictor/p/5735580.html" target="_blank" rel="external">mysql单点问题解决方案</a><br><a href="">mysql如何实现悲观锁和乐观锁？乐观锁通过version如何实现？</a><br><a href="">mysql中的聚集索引和非聚集索引的叶子节点包含哪些数据？实现原理？为什么主键长度不能太长?</a><br><a href="">innodb储存引擎的特性？插入缓存、两次写、自适应hash、异步IO、刷新临接页分别解决了什么问题？</a><br><a href="">innodb缓冲池划分，缓冲池、重做日志缓冲、额外内存池，缓冲池包含数据页、索引页、插入缓冲、锁信息等</a><br><a href="https://www.cnblogs.com/shijingxiang/articles/4743324.html" target="_blank" rel="external">mysql的innodb索引原理详解，什么是聚簇索引？它相比非聚簇索引有什么优缺点？索引和数据、数据变化导致索引B+树的维护</a><br><a href="">sql优化：减少IO次数，减少CPU计算</a></p>
 <h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><p><a href="https://www.jianshu.com/p/78f72ccf0377" target="_blank" rel="external">RPC框架实现原理，RPC框架解决的核心问题有哪些？</a><br><a href="https://thrift.apache.org/docs/concepts" target="_blank" rel="external">thrift框架分层设计，分层的依据是什么？</a></p>
 <h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><p><a href="http://blog.jobbole.com/114016/" target="_blank" rel="external">分布式消息队列复习精讲，分布式消息队列应用场景？缺点？物理架构？</a><br><a href="https://zhuanlan.zhihu.com/p/44373119" target="_blank" rel="external">zookeeper入门介绍，zookeeper可以用来干什么？</a><br><a href="https://colobu.com/2014/12/12/zookeeper-recipes-by-example-1/" target="_blank" rel="external">zookeeper实例学习-leader选举</a><br><a href="https://colobu.com/2014/12/12/zookeeper-recipes-by-example-2/" target="_blank" rel="external">zookeeper实例学习-分布式锁</a><br><a href="https://colobu.com/2014/12/16/zookeeper-recipes-by-example-8/" target="_blank" rel="external">zookeeper实例学习-Curator框架的应用</a><br><a href="https://www.infoq.cn/article/why-doesnot-alibaba-use-zookeeper" target="_blank" rel="external">阿里为什么不用zookeeper做服务发现</a><br><a href="https://dbaplus.cn/news-73-1123-1.html" target="_blank" rel="external">RockMQ如何解决顺序消息、重复消息、事务消息问题</a></p>
 <h2 id="工程设计"><a href="#工程设计" class="headerlink" title="工程设计"></a>工程设计</h2><p><a href="https://www.jianshu.com/p/dca5b00e72e4" target="_blank" rel="external">良好的RPC接口设计需要注意的方面</a><br><a href="https://www.jianshu.com/p/06479ea2dc46" target="_blank" rel="external">如何设计一个秒杀系统</a><br><a href="https://tech.meituan.com/2017/04/21/mt-leaf.html" target="_blank" rel="external">美团点评分布式ID生成系统</a><br><a href="https://yq.aliyun.com/articles/33077" target="_blank" rel="external">阿里毕玄：我在系统设计上犯的14个错</a><br><a href="https://yq.aliyun.com/articles/7491?spm=a2c4e.11153940.blogcont33077.7.1ad63782YY3TjP" target="_blank" rel="external">毕玄-架构师画像</a><br><a href="http://weizijun.cn/2016/03/17/%E8%81%8A%E4%B8%80%E8%81%8A%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E8%AE%BE%E8%AE%A1/" target="_blank" rel="external">分布式锁设计，Mysql实现、Redis</a><br><a href="https://mp.weixin.qq.com/s/ceP6t1XekJGhprlRKPP83Q" target="_blank" rel="external">如何发挥硬件优势提高MQ的性能</a></p>
 <h2 id="网络协议"><a href="#网络协议" class="headerlink" title="网络协议"></a>网络协议</h2><p><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">http协议的历史演变和设计思路，http协议内容有什么？每个版本中新增的字段干什么用的？</a></p>
 <h2 id="框架学习"><a href="#框架学习" class="headerlink" title="框架学习"></a>框架学习</h2><p><a href="https://cloud.tencent.com/developer/article/1181587" target="_blank" rel="external">四张图带你了解tomcat系统架构</a><br><a href="https://mp.weixin.qq.com/s/vGA-SMB790TrNA4GGO060Q" target="_blank" rel="external">Tomcat高性能调优探索,Tomcat对TreadPoolExecutor入队策略的修改、参数maxConnnections设置、nio的使用</a><br><a href="https://mp.weixin.qq.com/s/5SsbHhKy8ZNEfj6PENv6qw" target="_blank" rel="external">spring framework体系结构及内部各模块jar之间的maven依赖关系</a><br><a href="https://blog.csdn.net/niunai112/article/details/80601793" target="_blank" rel="external">Mybstis的二级缓存实现，SqlSession级实现之BaseExecutor、Mapper级实现之CachedExecutor</a><br><a href="http://weizijun.cn/categories/redis/" target="_blank" rel="external">redis学习，基础数据结构有哪些？高可用怎么实现的？为什么用跳表来实现，相比红黑树有什么区别？</a></p>
-<h2 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h2><p><a href="https://mp.weixin.qq.com/s/ArZwTwyid8WnOquZZ-EN_w" target="_blank" rel="external">spring面试问题top50</a><br><a href="https://blog.csdn.net/riemann_/article/details/86516052" target="_blank" rel="external">2018BATJ面试题汇总</a><br><a href="https://cloud.tencent.com/developer/article/1393502" target="_blank" rel="external">2019BATJ面试题汇总</a><br><a href="https://www.jianshu.com/p/5c926f878c96" target="_blank" rel="external">JAVA面试基础&amp;并发系列</a><br><a href="https://mp.weixin.qq.com/s/7BeMGscfK1HOKdawbxk6Wg" target="_blank" rel="external">我从阿里面试回来，想和java程序员谈一谈</a></p>
+<h2 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h2><p><a href="https://mp.weixin.qq.com/s/ArZwTwyid8WnOquZZ-EN_w" target="_blank" rel="external">spring面试问题top50</a><br><a href="https://blog.csdn.net/riemann_/article/details/86516052" target="_blank" rel="external">2018BATJ面试题汇总</a><br><a href="https://cloud.tencent.com/developer/article/1393502" target="_blank" rel="external">2019BATJ面试题汇总</a><br><a href="https://www.jianshu.com/p/5c926f878c96" target="_blank" rel="external">JAVA面试基础&amp;并发系列</a><br><a href="https://mp.weixin.qq.com/s/7BeMGscfK1HOKdawbxk6Wg" target="_blank" rel="external">我从阿里面试回来，想和java程序员谈一谈</a><br><a href="https://www.cnblogs.com/inspurhaitian/p/4647485.html" target="_blank" rel="external">JAVA面试中问及HIBERNATE与MYBATIS的对比总结</a></p>
+<h2 id="软技能"><a href="#软技能" class="headerlink" title="软技能"></a>软技能</h2><p><a href="https://mp.weixin.qq.com/s/GpOC4klG7gIGDiu9nVXQTg" target="_blank" rel="external">16个顶级思维模型</a><br><a href="https://mp.weixin.qq.com/s/fCtA1dQOmLPpSUXOsO2QUQ" target="_blank" rel="external">认知升级-成败取决于见识</a></p>
 
       
 
@@ -1317,151 +1477,6 @@
 
 
   
-    <article id="post-一致性Hash算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/03/一致性Hash算法/">一致性Hash算法</a>
-    </h1>
-  
-
-        
-        <a href="/2015/04/03/一致性Hash算法/" class="archive-article-date">
-  	<time datetime="2015-04-03T12:17:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-04-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>consistent hashing算法早在1997年的论文Consistent hashing and random trees中被提出，目前在cache系统中应用越来越广泛。</p>
-<hr>
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>比如你有N个cache服务器（后面简称cache），那么如何将一个对象 object映射到N个cache上呢，你很可能会采用类似下面的通用方法计算object的hash值，然后均匀地映射到到N个cache：</p>
-<blockquote>
-<p><strong>hash(object)%N</strong></p>
-</blockquote>
-<p>一切都运行正常，再考虑如下的两种情况；</p>
-<blockquote>
-<ol>
-<li>一个cache m down掉了（在实际应用中必须要考虑这种情况），这样所有映射到cache m的对象都会失效，怎么办，需要把cache m从cache中移除，这时候cache是N-1台，映射公式变成了<strong>hash(object)%(N-1)</strong>；</li>
-<li>由于访问加重，需要添加cache，这时候cache是N+1 台，映射公式变成了<strong>hash(object)%(N+1)</strong>；</li>
-</ol>
-</blockquote>
-<p>1和2意味着什么？这意味着突然之间几乎所有的 cache 都失效了。对于服务器而言，这是一场灾难，洪水般的访问都会直接冲向后台服务器；<br>再来考虑第三个问题，由于硬件能力越来越强，你可能想让后面添加的节点多做点活，显然上面的 hash 算法也做不到。<br>有什么方法可以改变这个状况呢，这就是consistent hashing…</p>
-<hr>
-<h2 id="hash算法和单调性"><a href="#hash算法和单调性" class="headerlink" title="hash算法和单调性"></a>hash算法和单调性</h2><p>Hash算法的一个衡量指标是单调性（Monotonicity），定义如下：</p>
-<blockquote>
-<p>单调性是指如果已经有一些object通过哈希分派到了相应的cache中，又有新的cache加入到系统中。哈希的结果应能够保证原有已分配的object可以被映射到新的cache中去，而不会被映射到旧的cache集合中的其他cache区。</p>
-</blockquote>
-<p>容易看到，上面的简单hash算法<strong>hash(object)%N</strong>难以满足单调性要求。</p>
-<hr>
-<h2 id="consistent-hashing算法的原理"><a href="#consistent-hashing算法的原理" class="headerlink" title="consistent hashing算法的原理"></a>consistent hashing算法的原理</h2><p>consistent hashing是一种hash算法，简单的说，在移除/添加一个cache时，它能够尽可能小的改变已存在key的映射关系，尽可能的满足单调性的要求。<br>下面就来按照5个步骤简单讲讲consistent hashing算法的基本原理。</p>
-<hr>
-<h3 id="环形hash空间"><a href="#环形hash空间" class="headerlink" title="环形hash空间"></a>环形hash空间</h3><p>考虑通常的hash算法都是将value映射到一个32位的key值，也即是 <strong>0~2^32-1</strong> 次方的数值空间；我们可以将这个空间想象成一个首（0）尾（2^32-1）相接的圆环，如下图所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/circle.JPG" alt="环形hash空间"></p>
-<hr>
-<h3 id="把对象映射到hash空间"><a href="#把对象映射到hash空间" class="headerlink" title="把对象映射到hash空间"></a>把对象映射到hash空间</h3><p>接下来考虑4个对象object1~object4，通过hash函数计算出的hash值key在环上的分布如下图所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(object1) = key1;</span><br><span class="line">… …</span><br><span class="line">hash(object4) = key4;</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/object.JPG" alt="图2 4个对象的key值分布"></p>
-<hr>
-<h3 id="把cache映射到hash空间"><a href="#把cache映射到hash空间" class="headerlink" title="把cache映射到hash空间"></a>把cache映射到hash空间</h3><p>Consistent hashing的基本思想就是将object和cache都映射到同一个hash数值空间中，并且使用相同的hash算法。<br>假设当前有A，B，C共3台cache，那么其映射结果将如下图所示，他们在hash空间中，以对应的hash值排列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hash(cache A) = key A;</span><br><span class="line">… …</span><br><span class="line">hash(cache C) = key C;</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://www.codeproject.com/KB/recipes/lib-conhash/cache.JPG" alt="图3 cache和对象的key值分布"></p>
-<p>说到这里，顺便提一下cache的hash计算，一般的方法可以使用cache机器的IP地址或者机器名作为hash输入。</p>
-<hr>
-<h3 id="把object映射到cache"><a href="#把object映射到cache" class="headerlink" title="把object映射到cache"></a>把object映射到cache</h3><p>现在cache和object都已经通过同一个hash算法映射到hash数值空间中了，接下来要考虑的就是如何将object映射到cache上面了。<br>在这个环形空间中，如果沿着顺时针方向从object的key值出发，直到遇见一个cache，那么就将该对象存储在这个cache上，因为object和cache的hash值是固定的，因此这个cache必然是唯一、确定的。<br>继续上面的例子（参见图3），根据上面的方法，对象object1将被存储到cache A上；object2和object3被存储到cache C；object4被存储到cache B；</p>
-<hr>
-<h3 id="考察cache的变动"><a href="#考察cache的变动" class="headerlink" title="考察cache的变动"></a>考察cache的变动</h3><p>前面讲过，通过hash然后求余的方法带来的最大问题就在于不能满足单调性，当cache有所变动时，cache会失效，进而对后台服务器造成巨大的冲击，现在就来分析分析consistent hashing算法。</p>
-<hr>
-<h4 id="移除cache"><a href="#移除cache" class="headerlink" title="移除cache"></a>移除cache</h4><p>考虑假设cache B挂掉了，根据上面讲到的映射方法，这时受影响的将仅是那些沿cache B逆时针遍历直到下一个cache（cache C）之间的对象，也即是本来映射到cache B上的那些对象。<br>因此这里仅需要变动对象object4，将其重新映射到cache C上即可，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/remove.JPG" alt="图4 Cache B 被移除后的cache映射"></p>
-<hr>
-<h4 id="添加cache"><a href="#添加cache" class="headerlink" title="添加cache"></a>添加cache</h4><p>再考虑添加一台新的cache D的情况，假设在这个环形hash空间中，cache D被映射在对象object2和object3之间。这时受影响的将仅是那些沿cache D逆时针遍历直到下一个cache（ cache B ）之间的对象（它们是也本来映射到cache C上对象的一部分），将这些对象重新映射到cache D上即可。<br>因此这里仅需要变动对象object2，将其重新映射到cache D上，变化如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/add.JPG" alt="图5 添加 cache D 后的映射关系"></p>
-<hr>
-<h2 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h2><p>考量Hash算法的另一个指标是平衡性 (Balance) ，定义如下：</p>
-<blockquote>
-<p>平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。</p>
-</blockquote>
-<p>hash算法并不是保证绝对的平衡，如果<strong>cache少</strong>的话，对象并不能被均匀的映射到cache上，比如在上面的例子中，仅部署cache A和 cache C的情况下，在4个对象中，cache A仅存储了object1，而cache C则存储了object2、object3和object4；分布是很不均衡的。<br>为了解决这种情况，consistent hashing引入了“虚拟节点”的概念，它可以如下定义：</p>
-<blockquote>
-<p>“虚拟节点”（virtual node）是实际节点在 hash 空间的复制品（replication），一个实际节点对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在hash空间中以hash值排列。</p>
-</blockquote>
-<p>仍以仅部署cache A和cache C的情况为例，在图4中我们已经看到，cache分布并不均匀。现在我们引入虚拟节点，并设置“复制个数”为2，这就意味着一共会存在4个“虚拟节点”，cache A1、cache A2代表了cache A；cache C1、cache C2代表了cache C。假设一种比较理想的情况，如下图：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/virtual.JPG" alt="图6 引入“虚拟节点”后的映射关系"></p>
-<p>此时，对象到“虚拟节点”的映射关系为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">objec1-&gt;cache A2 ； objec2-&gt;cache A1 ；</span><br><span class="line">objec3-&gt;cache C1 ； objec4-&gt;cache C2 ；</span><br></pre></td></tr></table></figure></p>
-<p>因此对象object1和object2都被映射到了cache A上，而object3和object4映射到了cache C上,平衡性有了很大提高。</p>
-<p>引入“虚拟节点”后，映射关系就从{object-&gt;cache}转换到了{object-&gt;虚拟节点-&gt;cache}，查询物体所在cache时的映射关系变成了如下所示：<br><img src="http://www.codeproject.com/KB/recipes/lib-conhash/map.JPG" alt="图7 查询对象所在 cache"></p>
-<p>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设cache A的IP地址为202.168.14.241。<br>引入“虚拟节点”前，计算cache A的hash值：</p>
-<blockquote>
-<p><strong>Hash(“202.168.14.241”);</strong></p>
-</blockquote>
-<p>引入“虚拟节点”后，计算“虚拟节”点cache A1和cache A2的hash值：</p>
-<blockquote>
-<p><strong>Hash(“202.168.14.241#1”);</strong>  // cache A1<br><strong>Hash(“202.168.14.241#2”);</strong>  // cache A2</p>
-</blockquote>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以上是Consistent hashing的基本原理,仅供参考。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">服务治理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/工程应用//" class="article-tag-list-link color5">工程应用</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2015/04/03/一致性Hash算法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1551,15 +1566,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">技术学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+                <a href="javascript:void(0)" class="js-tag color5">技术学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1567,15 +1578,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">工具</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">java基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1583,7 +1594,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">java基础</a>
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1592,6 +1603,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">算法基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">业务整理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
             
             <div class="clearfix"></div>
