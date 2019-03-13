@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
-产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
+系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta property="og:type" content="article">
 <meta property="og:title" content="支付业务整理">
@@ -18,19 +18,19 @@
 <meta property="og:site_name" content="fblq">
 <meta property="og:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
-产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
+系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta property="og:image" content="https://github.com/fblq/\img\支付概述图.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\支付产品架构图.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\交易信息流与资金流.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\最简单的支付系统.jpg">
 <meta property="og:image" content="https://github.com/fblq/\img\资金视角系统关系.jpg">
-<meta property="og:updated_time" content="2019-03-07T09:51:58.000Z">
+<meta property="og:updated_time" content="2019-03-13T18:07:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="支付业务整理">
 <meta name="twitter:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
 内容
-产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
+系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
 <meta name="twitter:image" content="https://github.com/fblq/\img\支付概述图.jpg">
   
@@ -172,19 +172,30 @@
       
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。</p>
 <h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><ul>
-<li>产品架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。</li>
+<li>系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。</li>
 <li>系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照通道能力、产品能力、场景能力的层次结构说一下业务流程。</li>
 <li>系统架构视角，从资金层的角度，说一下支付系统和清结算、账务、会计、对账、差错之间的关系。</li>
 <li>支付业务的底线，从安全角度，说一下支付业务发展中需要重点关注的账户、资金、数据的安全性；从商户二清和客户备付金角度，说一下合规的背景和目前的解决方案。</li>
 </ul>
 <h2 id="产品架构"><a href="#产品架构" class="headerlink" title="产品架构"></a>产品架构</h2><h3 id="参与方"><a href="#参与方" class="headerlink" title="参与方"></a>参与方</h3><p>支付业务中涉及到的参与方的关系如下：<br><img src="\img\支付概述图.jpg" alt=""></p>
-<p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的产品关系如下：<br><img src="\img\支付产品架构图.jpg" alt=""></p>
 <ul>
-<li>业务层：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台</li>
-<li>接入层：用户门户、商户门户、api、H5/SDK</li>
-<li>收单层: 下单、构建收银台、充值、转账、提现、收款、退款、付款、查询</li>
-<li>支付层：收款、退款、付款、查询、回调</li>
-<li>渠道层：实名、签约、协议支付、商业委托支付、网关支付、认证支付、退款、付款、差错</li>
+<li>名词解释：</li>
+<li>入网商户：签订服务合同中的甲方，比如针对支付服务，跟支付宝签合同的服务平台、商家、公司等。</li>
+<li>支付机构：拥有支付牌照，且配套的支付系统经过相关部门的检查，各项指标符合要求的组织，比如支付宝、微信、京东支付等。</li>
+<li>聚合服务商：没有支付牌照，但具备线上收单支付能力的组织，比如Ping++。</li>
+<li>银联、网联：国家金融服务建设的中坚，帮助支付机构对接银行的业务能力。</li>
+<li>资方：自身具备放贷资质的组织，如小额信贷公司。</li>
+</ul>
+<blockquote>
+<p><strong>例子</strong><br>1.张三清空淘宝购物车的时候，点击立即支付，淘宝会以支付宝入网商户的身份，调用支付宝的收银能力，这时用户就能在支付宝里完成支付。<br>其中的支付宝就是一家支付机构，它以商户的身份在银联、网联注册入网，调用银联、网联的支付能力。<br>而银联、网联是帮助所有支付机构，如支付宝、微信、京东支付、美团支付等等，去对接所有的银行，集中把银行的支付能力转接给支付机构，各家支付机构不用挨家挨户地去找银行进行对接。<br>2.用户在携程APP上订完酒店后支付时，看到的支付宝、微信支付方式，就是携程转接了支付机构的支付能力。<br>3.对于支付机构和聚合服务商直接对接资方的场景一般是小额信贷，有蚂蚁花呗、京东白条、去哪儿拿去花、滴滴信用付等。</p>
+</blockquote>
+<h3 id="产品层级关系"><a href="#产品层级关系" class="headerlink" title="产品层级关系"></a>产品层级关系</h3><p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的层级关系如下：<br><img src="\img\支付产品架构图.jpg" alt=""></p>
+<ul>
+<li>业务：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台</li>
+<li>接入：用户门户、商户门户、api、H5/SDK</li>
+<li>收单: 下单、构建收银台、充值、转账、提现、收款、退款、付款、查询</li>
+<li>支付：收款、退款、付款、查询、回调</li>
+<li>渠道：实名、签约、协议支付、商业委托支付、网关支付、认证支付、退款、付款、差错</li>
 <li>外部合作方：银联、网联、支付机构、商业银行</li>
 </ul>
 <blockquote>
@@ -216,21 +227,24 @@
 </blockquote>
 <ul>
 <li>思考：</li>
-<li>1.银行在受理退款时，跟原交易的是否完成清算有关，即需要原交易成功4小时后才受理退款，支付机构如何处理用户在线支付后的实时退款？</li>
+<li>1.银行在受理退款时，跟原交易是否完成清算有关，即需要原交易成功4小时后才受理退款，支付机构如何处理用户在线支付后的实时退款？</li>
 <li>2.余额+银行卡组合支付，如何保证事务性？</li>
 <li>3.外部渠道超时的情况下，用户重复提交支付时，怎么防止渠道侧重复扣款？</li>
 <li>4.如果选用mysql做数据持久化的话，mysql的主从架构怎么设计？</li>
 <li>5.提现场景下，mysql主库宕机，从库升主库时，数据不能完全从主库同步过来的情况下，可反复提现导致的资金损失风险怎么控制？</li>
 <li>6.服务重启时，机器正在处理的请求如何处理？重启前进行进程上下文的保存，重启后再恢复进程。</li>
 <li>7.如何保证幂等？订单信息严格按照状态流转的设计进行更新。</li>
+<li>8.用户重复支付，为什么不先查之前流水的支付状态，而是每次都要新建一笔流水，重新发起支付？重复支付的原因未知（用户换卡重新支付、上一笔流水落库失败、渠道积压引起的超时）、交易流水的用途。</li>
+<li>9.对于用户换卡重新支付，用户从A卡换到B卡支付，最后成功的是A卡的流水，但用户看到的明明是选的B卡支付成功，短信通知的确是A卡被扣款，这种用户体验是否有考虑。</li>
+<li>9.每笔交易流水是一次交易凭证，内部失败外部渠道有可能成功，后期对账要能发现线上交易的这种潜在问题，所以需要想一下记录的流水是否真实反映了用户的支付行为，</li>
 </ul>
 <h3 id="支付资金流视角的架构"><a href="#支付资金流视角的架构" class="headerlink" title="支付资金流视角的架构"></a>支付资金流视角的架构</h3><p><img src="\img\资金视角系统关系.jpg" alt=""></p>
 <ul>
 <li>思考：</li>
-<li>1.差错业务为什么很难做？跟渠道、收款行、付款行打交道就没有容易的事情。</li>
+<li>1.差错业务为什么很难做？跟渠道、收款行、付款行沟通合作的事情会很耗精力和时间。</li>
 </ul>
 <h2 id="支付安全"><a href="#支付安全" class="headerlink" title="支付安全"></a>支付安全</h2><h3 id="数据安全"><a href="#数据安全" class="headerlink" title="数据安全"></a>数据安全</h3><ul>
-<li>接口数据安全：利用数字信封对敏感信息进行对称加解密、对接口数据进行非对称加解密、接口签名。</li>
+<li>接口数据安全：接口数据的签名、利用数字信封对敏感信息进行对称加解密、对接口数据进行非对称加解密。</li>
 <li>日志数据安全：对手机号、身份证号、银行卡号、支付账号等信息进行脱敏。</li>
 <li>mysql机房数据安全：独立机房，访问入口有严格的ACL白名单机制。</li>
 </ul>
@@ -294,7 +308,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">业务整理</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">支付业务</a>
         		</li>
       		
 		</ul>
@@ -306,7 +320,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/支付//" class="article-tag-list-link color3">支付</a>
+        			<a href="/categories/业务学习//" class="article-tag-list-link color5">业务学习</a>
         		</li>
       		
 		</ul>
@@ -323,6 +337,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/03/12/万历十五年有感/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          万历十五年有感
+        
+      </div>
+    </a>
   
   
     <a href="/2019/02/28/2019年技术学习整理/" id="article-nav-older" class="article-nav-link-wrap">
@@ -444,11 +467,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">知识梳理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -456,11 +479,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">技术学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -469,6 +488,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">工具</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -484,11 +507,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">架构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">算法基础</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">业务整理</a>
+                <a href="javascript:void(0)" class="js-tag color5">支付业务</a>
               </li>
             
             <div class="clearfix"></div>
