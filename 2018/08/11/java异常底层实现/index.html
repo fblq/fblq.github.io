@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>java异常底层实现 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
-捕获异常try、catch、finally代码块编译后的字节码结构图。
-finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+  <meta name="description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。 捕获异常try、catch、finally代码块编译后的字节码结构图。 finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+<meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java异常底层实现">
 <meta property="og:url" content="https://github.com/fblq/2018/08/11/java异常底层实现/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
-捕获异常try、catch、finally代码块编译后的字节码结构图。
-finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+<meta property="og:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。 捕获异常try、catch、finally代码块编译后的字节码结构图。 finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-08-11T19:13:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java异常底层实现">
-<meta name="twitter:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。
-捕获异常try、catch、finally代码块编译后的字节码结构图。
-finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
+<meta name="twitter:description" content="引言抛出异常通过throw关键抛出一个异常，JVM需要生成异常的栈轨迹，会逐一访问当前线程的java栈帧，并记录各种调试信息，包括栈帧指向的方法名字、方法所在的类名、文件名以及代码中触发异常的位置（新建异常的位置，不是throw语句的位置）。 捕获异常try、catch、finally代码块编译后的字节码结构图。 finally块会编译成多块字节码，会放在程序中每一个可能的出口。在编译生成的字节码">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -42,7 +38,7 @@ finally块会编译成多块字节码，会放在程序中每一个可能的出�
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -354,14 +350,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">知识梳理</a>
               </li>
              
@@ -370,11 +358,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -382,11 +370,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">架构</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -395,6 +387,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -410,7 +406,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

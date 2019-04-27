@@ -1,38 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>支付业务整理 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
-内容
-系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
+  <meta name="description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。 内容 系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
+<meta name="keywords" content="支付业务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="支付业务整理">
 <meta property="og:url" content="https://github.com/fblq/2019/03/05/支付业务整理/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
-内容
-系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
-<meta property="og:image" content="https://github.com/fblq/\img\支付概述图.jpg">
-<meta property="og:image" content="https://github.com/fblq/\img\支付产品架构图.jpg">
-<meta property="og:image" content="https://github.com/fblq/\img\交易信息流与资金流.jpg">
-<meta property="og:image" content="https://github.com/fblq/\img\最简单的支付系统.jpg">
-<meta property="og:image" content="https://github.com/fblq/\img\资金视角系统关系.jpg">
+<meta property="og:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。 内容 系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/img/支付概述图.jpg">
+<meta property="og:image" content="https://github.com/img/支付产品架构图.jpg">
+<meta property="og:image" content="https://github.com/img/交易信息流与资金流.jpg">
+<meta property="og:image" content="https://github.com/img/最简单的支付系统.jpg">
+<meta property="og:image" content="https://github.com/img/资金视角系统关系.jpg">
 <meta property="og:updated_time" content="2019-03-13T18:07:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="支付业务整理">
-<meta name="twitter:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。
-内容
-系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。
-系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
-<meta name="twitter:image" content="https://github.com/fblq/\img\支付概述图.jpg">
+<meta name="twitter:description" content="引言从2016年7月开始工作到现在，接触的都是支付业务，从聚合支付服务到支付机构，虽然本职工作没有涉及到支付渠道和银行，但也有一些合作和交流，是时候该整理一下业务知识，以后继续走下去也好有一个参考。 内容 系统架构视角，说一下用户、商户、支付机构、渠道、银行角色之间的关系；再从信息流、资金流两个方面，说一下所有支付产品的运行机制。 系统架构视角，从交易信息层的角度，根据功能对系统进行职责划分，按照">
+<meta name="twitter:image" content="https://github.com/img/支付概述图.jpg">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -51,7 +44,7 @@
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -177,7 +170,7 @@
 <li>系统架构视角，从资金层的角度，说一下支付系统和清结算、账务、会计、对账、差错之间的关系。</li>
 <li>支付业务的底线，从安全角度，说一下支付业务发展中需要重点关注的账户、资金、数据的安全性；从商户二清和客户备付金角度，说一下合规的背景和目前的解决方案。</li>
 </ul>
-<h2 id="产品架构"><a href="#产品架构" class="headerlink" title="产品架构"></a>产品架构</h2><h3 id="参与方"><a href="#参与方" class="headerlink" title="参与方"></a>参与方</h3><p>支付业务中涉及到的参与方的关系如下：<br><img src="\img\支付概述图.jpg" alt=""></p>
+<h2 id="产品架构"><a href="#产品架构" class="headerlink" title="产品架构"></a>产品架构</h2><h3 id="参与方"><a href="#参与方" class="headerlink" title="参与方"></a>参与方</h3><p>支付业务中涉及到的参与方的关系如下：<br><img src="\img\支付概述图.jpg" alt></p>
 <ul>
 <li>名词解释：</li>
 <li>入网商户：签订服务合同中的甲方，比如针对支付服务，跟支付宝签合同的服务平台、商家、公司等。</li>
@@ -189,7 +182,7 @@
 <blockquote>
 <p><strong>例子</strong><br>1.张三清空淘宝购物车的时候，点击立即支付，淘宝会以支付宝入网商户的身份，调用支付宝的收银能力，这时用户就能在支付宝里完成支付。<br>其中的支付宝就是一家支付机构，它以商户的身份在银联、网联注册入网，调用银联、网联的支付能力。<br>而银联、网联是帮助所有支付机构，如支付宝、微信、京东支付、美团支付等等，去对接所有的银行，集中把银行的支付能力转接给支付机构，各家支付机构不用挨家挨户地去找银行进行对接。<br>2.用户在携程APP上订完酒店后支付时，看到的支付宝、微信支付方式，就是携程转接了支付机构的支付能力。<br>3.对于支付机构和聚合服务商直接对接资方的场景一般是小额信贷，有蚂蚁花呗、京东白条、去哪儿拿去花、滴滴信用付等。</p>
 </blockquote>
-<h3 id="产品层级关系"><a href="#产品层级关系" class="headerlink" title="产品层级关系"></a>产品层级关系</h3><p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的层级关系如下：<br><img src="\img\支付产品架构图.jpg" alt=""></p>
+<h3 id="产品层级关系"><a href="#产品层级关系" class="headerlink" title="产品层级关系"></a>产品层级关系</h3><p>支付业务中业务层、接入层、收单层、支付层、渠道层、外部合作方间的层级关系如下：<br><img src="\img\支付产品架构图.jpg" alt></p>
 <ul>
 <li>业务：收银台（二维码、闪付、小额免密）、API服务(开户、分账、出金入金)、外部商户、开放平台</li>
 <li>接入：用户门户、商户门户、api、H5/SDK</li>
@@ -201,7 +194,7 @@
 <blockquote>
 <p>产品work机制：<br>1.先基于用户门户、商户门户积累的用户资源，在任何一个需要支付的页面入口处，通过一些营销手段引导用户开通支付功能，即开通支付账户并绑定银行卡，积累了这些账户资源后，就可以开始在线上开展收单支付业务了。<br>2.通过接入层和收单层的能力在线上服务消费的业务链终端开展收单业务，用户选择服务消费、下单、进入收银台、选择支付方式发起支付，支付层就能结合客户的开户信息及账户信息，确定商户的手续费和结算方式，同时能根据支付方式信息（银行卡、余额、营销）路由出支付通道及相应的通道手续费，向渠道层发起支付，渠道层根据选出的支付通道按照格式要求组装报文，将支付请求发往网联、银联。<br>3.支付层会对交易凭证数据进行持久化，涉及的核心数据有交易双方的用户信息、支付产品信息、交易订单信息、银行卡信息、通道信息、商户的结算信息，用于上报结算时给清结算使用。</p>
 </blockquote>
-<h3 id="信息流和资金流"><a href="#信息流和资金流" class="headerlink" title="信息流和资金流"></a>信息流和资金流</h3><p>用户、服务提供商有自己的银行账户和支付账户，支付机构有自己的对公账户和备付金账户，先看一下支付公司、网联、央行、银行这四个角色在交易信息流和资金流上的交互关系：（其中备付金为支付公司在央行开的备付金集中存管账户）<br><img src="\img\交易信息流与资金流.jpg" alt=""></p>
+<h3 id="信息流和资金流"><a href="#信息流和资金流" class="headerlink" title="信息流和资金流"></a>信息流和资金流</h3><p>用户、服务提供商有自己的银行账户和支付账户，支付机构有自己的对公账户和备付金账户，先看一下支付公司、网联、央行、银行这四个角色在交易信息流和资金流上的交互关系：（其中备付金为支付公司在央行开的备付金集中存管账户）<br><img src="\img\交易信息流与资金流.jpg" alt></p>
 <p>类比滴滴的打车场景（乘客、司机、网约车平台、滴滴支付），说一下新零售场景（用户、供应商、新零售商、支付机构），看一下支付公司怎么能帮助平台型小企业做生意。</p>
 <blockquote>
 <p><strong>1.用户支付</strong>（支付公司向新零售商收取手续费）<br>资金流：用户银行卡（-100）-&gt;支付公司的备付金账户(+100)<br><strong><em>支付公司清结算：</em></strong><br>信息流：待清算账户（计算手续费）-&gt;待结算账户(资金确认)-&gt;现金账户（供应商+80：新零售商+20）<br><strong>2.新零售商提现</strong><br>信息流：现金账户（-80）<br>资金流：备付金（-80）-&gt;新零售商的银行账户（+80）<br><strong>3.用户充值</strong><br>信息流：用户支付账户的现金账户（+100）<br>资金流：用户银行卡（-100）-&gt;支付公司的备付金账户（+100）<br><strong>4.用户跨行转账（建行-&gt;招行）</strong><br>资金流：用户建行卡（-100）-&gt;支付公司的备付金账户（+100） AND 支付公司的备付金账户（-100）-&gt;用户招行卡（+100）<br><strong><em>收取手续费</em></strong><br>信息流：平台手续费（+1）<br>资金流：用户建行卡（-1）-&gt;支付公司的备付金账户（+1）</p>
@@ -216,7 +209,7 @@
 <li>产品要求资金正确、账户安全、业务合规。</li>
 <li>系统要求有稳定性好、能扛的并发量高、端上消费的响应及时、线上问题的运维高效、交易数据安全。</li>
 </ul>
-<h3 id="支付信息流视角的架构"><a href="#支付信息流视角的架构" class="headerlink" title="支付信息流视角的架构"></a>支付信息流视角的架构</h3><p><img src="\img\最简单的支付系统.jpg" alt=""></p>
+<h3 id="支付信息流视角的架构"><a href="#支付信息流视角的架构" class="headerlink" title="支付信息流视角的架构"></a>支付信息流视角的架构</h3><p><img src="\img\最简单的支付系统.jpg" alt></p>
 <ul>
 <li>名字解释：</li>
 <li>渠道：类似银联、网联、支付机构，支持多家银行的收付款能力，也就是一个渠道下有多个通道。</li>
@@ -238,7 +231,7 @@
 <li>9.对于用户换卡重新支付，用户从A卡换到B卡支付，最后成功的是A卡的流水，但用户看到的明明是选的B卡支付成功，短信通知的确是A卡被扣款，这种用户体验是否有考虑。</li>
 <li>9.每笔交易流水是一次交易凭证，内部失败外部渠道有可能成功，后期对账要能发现线上交易的这种潜在问题，所以需要想一下记录的流水是否真实反映了用户的支付行为，</li>
 </ul>
-<h3 id="支付资金流视角的架构"><a href="#支付资金流视角的架构" class="headerlink" title="支付资金流视角的架构"></a>支付资金流视角的架构</h3><p><img src="\img\资金视角系统关系.jpg" alt=""></p>
+<h3 id="支付资金流视角的架构"><a href="#支付资金流视角的架构" class="headerlink" title="支付资金流视角的架构"></a>支付资金流视角的架构</h3><p><img src="\img\资金视角系统关系.jpg" alt></p>
 <ul>
 <li>思考：</li>
 <li>1.差错业务为什么很难做？跟渠道、收款行、付款行沟通合作的事情会很耗精力和时间。</li>
@@ -268,7 +261,7 @@
 <blockquote>
 <p>二清解决法案：获得清结算能力需要央行的批准，了解有清结算能力的组织有银联、网联、支付机构。<br>备付金集中存管：支付机构的客户备付金集中存缴，不得挪用，受央行监管。</p>
 </blockquote>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.pingxx.com/" target="_blank" rel="external">Ping++博客</a><br><a href="https://mp.weixin.qq.com/s/rPTWCw8EiSQUm5B-_ju8Vw" target="_blank" rel="external">干货|从入门到实践——财务系统设计详解</a><br><a href="https://mp.weixin.qq.com/s/NeNPXllRm-UMtZ-YHybwVw" target="_blank" rel="external">干货|美团外卖亿级订单下的风控设计</a><br><a href="http://doc.cocolian.cn/" target="_blank" rel="external">凤凰牌老熊-在这里读懂支付</a><br><a href="https://mp.weixin.qq.com/s/9V1VC2Fe9HdGzdvQ2A7wiA" target="_blank" rel="external">实战案例解析：去哪儿网支付系统架构演进全历程</a><br><a href="https://mp.weixin.qq.com/s/k9L8GwFAuzWgs8JRbrnnGA" target="_blank" rel="external">一站式资金解决方案（上）</a><br><a href="https://mp.weixin.qq.com/s/ZBXOlkU9hdRPxXa0Dwfr9Q" target="_blank" rel="external">一站式资金解决方案（下）</a><br><a href="https://mp.weixin.qq.com/s/suBAJrP6uN2kFgHtGz16mw" target="_blank" rel="external">微信高并发资金交易系统设计方案——百亿红包背后的技术支撑</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://blog.pingxx.com/" target="_blank" rel="noopener">Ping++博客</a><br><a href="https://mp.weixin.qq.com/s/rPTWCw8EiSQUm5B-_ju8Vw" target="_blank" rel="noopener">干货|从入门到实践——财务系统设计详解</a><br><a href="https://mp.weixin.qq.com/s/NeNPXllRm-UMtZ-YHybwVw" target="_blank" rel="noopener">干货|美团外卖亿级订单下的风控设计</a><br><a href="http://doc.cocolian.cn/" target="_blank" rel="noopener">凤凰牌老熊-在这里读懂支付</a><br><a href="https://mp.weixin.qq.com/s/9V1VC2Fe9HdGzdvQ2A7wiA" target="_blank" rel="noopener">实战案例解析：去哪儿网支付系统架构演进全历程</a><br><a href="https://mp.weixin.qq.com/s/k9L8GwFAuzWgs8JRbrnnGA" target="_blank" rel="noopener">一站式资金解决方案（上）</a><br><a href="https://mp.weixin.qq.com/s/ZBXOlkU9hdRPxXa0Dwfr9Q" target="_blank" rel="noopener">一站式资金解决方案（下）</a><br><a href="https://mp.weixin.qq.com/s/suBAJrP6uN2kFgHtGz16mw" target="_blank" rel="noopener">微信高并发资金交易系统设计方案——百亿红包背后的技术支撑</a></p>
 
       
 
@@ -467,14 +460,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">知识梳理</a>
               </li>
              
@@ -483,11 +468,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -495,11 +480,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">架构</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -508,6 +497,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -523,7 +516,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:

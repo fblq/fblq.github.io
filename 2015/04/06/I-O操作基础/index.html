@@ -1,50 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://github.com/fblq">
   <title>I/O概念基础 | fblq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+  <meta name="description" content="引言 I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O  一次完整的I/O操作包括两个阶段：  1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）   阻塞I/O 用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+<meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="I/O概念基础">
+<meta property="og:title" content="I&#x2F;O概念基础">
 <meta property="og:url" content="https://github.com/fblq/2015/04/06/I-O操作基础/index.html">
 <meta property="og:site_name" content="fblq">
-<meta property="og:description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+<meta property="og:description" content="引言 I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O  一次完整的I/O操作包括两个阶段：  1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）   阻塞I/O 用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-08-11T10:32:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="I/O概念基础">
-<meta name="twitter:description" content="引言
-I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
-
-一次完整的I/O操作包括两个阶段：
-
-1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）
-
-
-阻塞I/O
-用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
+<meta name="twitter:title" content="I&#x2F;O概念基础">
+<meta name="twitter:description" content="引言 I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O  一次完整的I/O操作包括两个阶段：  1）数据准备（内核准备数据供I/O操作使用）2）数据拷贝（将内核中的数据拷贝到用户进程）   阻塞I/O 用户进程向CPU发送I/O请求，在CPU没有准备好数据之前，不会向进程返回任何信息，进程一直阻塞，等待着CPU准备好数据并返回准备好的信号，然后进程把数据从CPU拷贝到用户">
   
     <link rel="alternative" href="/atom.xml" title="fblq" type="application/atom+xml">
   
@@ -63,7 +38,7 @@ I/O分为阻塞I/O、非阻塞I/O、复用I/O、同步信号I/O、异步I/O
   
 
 </head>
-
+</html>
 <body>
   <div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
@@ -409,14 +384,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">知识梳理</a>
               </li>
              
@@ -425,11 +392,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">SpringMVC</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -437,11 +404,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">工具</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">架构</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -450,6 +421,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">服务治理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">架构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -465,7 +440,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
         </div>
         <ul class="search-ul">
           <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
-            缺失模块。<br/>1、请确保node版本大于6.2<br/>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            缺失模块。<br>1、请确保node版本大于6.2<br>2、在博客根目录（注意不是yilia根目录）执行以下命令：<br> npm i hexo-generator-json-content --save<br><br>
             3、在根目录_config.yml里添加配置：
 <pre style="font-size: 12px;" q-show="jsonFail">
   jsonContent:
